@@ -1,0 +1,24 @@
+spring:
+  application:
+    name=MaasService
+  profiles:
+    active: dev # prod or dev
+  jpa:
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    show-sql: false  # 在log中顯示SQL語句  t:顯示  f:不顯示
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=maas
+
+  doc:
+    swagger-ui:
+      path: /swagger-ui
+      tagsSorter: alpha  # http://localhost:8080/MaasService/swagger-ui/index.html
+    api-docs:
+      path: /rest-api-docs
+server:
+  swagger:
+    url: http://localhost:8080/MaasService
+  servlet:
+    context-path: /MaasService
