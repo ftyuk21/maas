@@ -21,6 +21,7 @@ export const routes: Routes = [
         ]
     },
     { path: 'landing', loadChildren: () => import('./landing/landing.module').then(m => m.LandingModule) },
+    { path: 'about-us', loadChildren: () => import('./pages/about-us/about-us.module').then(m => m.AboutUsModule) },
     { path: 'sign-in', loadChildren: () => import('./pages/sign-in/sign-in.module').then(m => m.SignInModule)},
     { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
     { path: '**', component: NotFoundComponent }
