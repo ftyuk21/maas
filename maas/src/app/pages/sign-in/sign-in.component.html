@@ -1,37 +1,38 @@
-<div class="signIn flex justify-center blur-sm">
-    <div class="self-center blur-lg w-96">
+<div class="signIn flex justify-center">
+    <div class="self-center w-96">
         <mat-card>
             <mat-card-content>
                 <div class="flex flex-col gap-4 items-center">
-                    <div class="w-24 self-start">
+                    <div class="w-24 self-start ">
                         <img src="assets/images/others/LOGO.png" alt="My Image">
                     </div>
 
                     <form [formGroup]="loginForm" class="flex flex-col">
-                        <div class="">
+                        <div class="mb-3">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Email</mat-label>
                                 <input type="email" matInput formControlName="email" placeholder="Ex. pat@example.com"
                                     required>
-                                <mat-error *ngIf="loginForm.controls.email.errors?.required">Name is required</mat-error>
+                                <mat-error *ngIf="loginForm.controls.email.errors?.required">帳號不府合規範</mat-error>
                             </mat-form-field>
                         </div>
 
                         <div>
                             <mat-form-field class="example-full-width">
-                                <mat-label>Email</mat-label>
+                                <mat-label>password</mat-label>
                                 <input type="email" matInput formControlName="email" placeholder="Ex. pat@example.com"
                                     required>
-                                <mat-error *ngIf="loginForm.controls.email.errors?.required">Name is required</mat-error>
+                                <mat-error *ngIf="loginForm.controls.password.errors?.required">密碼不府合規範</mat-error>
                             </mat-form-field>
                         </div>
-
                     </form>
-                    <!-- <div>
-                        <input type="email" matInput placeholder="Ex. pat@example.com">
-                    </div> -->
+                    <div class="flex justify-between w-2/3">
+                        <p>忘記密碼?</p>
+                        <p>註冊</p>
+                    </div>
+
                     <div>
-                        <button mat-raised-button color="primary" type="submit">登入</button>
+                        <button class="w-full" mat-stroked-button type="submit">登入</button>
                     </div>
                 </div>
             </mat-card-content>
