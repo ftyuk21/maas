@@ -1,5 +1,14 @@
-.auth{
+.auth {
     white-space: nowrap;
     padding: 7px 14px;
-    font-weight: 500;    
+    font-weight: 500;
+}
+
+.signIn {
+    background-image: url('../../../assets/images/car.png');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    // backdrop-filter: blur(10px);
 }
