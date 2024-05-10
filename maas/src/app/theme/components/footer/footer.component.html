@@ -1,19 +1,57 @@
+<footer class="footer flex">
+  <!-- 左 -->
+  <div class="w-8/12 flex flex-col">
 
-<head>
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
-  />
-  <style>
-    .footer {
-      color: aliceblue;
-      position: relative;
-    }
-  </style>
-</head>
-<footer class="">
-  <div class="footer">
-    <p>Circle</p>
+    <!-- 左上 -->
+    <div>
+      <p class="">Circle</p>
+      <p>Copyright © 2024 All Rights Reserved</p>
+      <p>Contact us: service@circle.com | +886 1234-5678</p>
+    </div>
+
+    <!-- 左下 -->
+    <div class="flex">
+      <figure style="margin: 10px">
+        <a href="https://www.instagram.com/"><img src="assets/images/others/ig.png" alt="" width="40px" height="40px" /></a>
+      </figure>
+      <figure style="margin: 10px">
+        <a href="https://www.facebook.com/"><img src="assets/images/others/fb.png" alt="" width="40px" height="40px" /></a>
+      </figure>
+    </div>
+  </div>
+
+
+  <!-- 右 -->
+  <div class="w-5/12 flex justify-end items-end gap-2">
+    <div>
+      <a [routerLink]="['/privacy']">
+        <p>隱私權政策</p>
+      </a>
+    </div>
+    <div>
+      <a [routerLink]="['/terms']">
+        <p>使用者條款</p>
+      </a>
+    </div>
+    <div>
+      <a [routerLink]="['/abot-us']">
+        <p>
+          關於我們
+        </p>
+      </a>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <!-- <p>Circle</p>
     <p>Copyright © 2024 All Rights Reserved</p>
     <p>Contact us: service@circle.com | +886 1234-5678</p>
     <div style="display: flex; justify-content: left; align-items: left">
@@ -35,14 +73,14 @@
             height="40px"
         /></a>
       </figure>
-      <a href="http://localhost:4200/privacy"
+      <a [routerLink]="['/privacy']"
         ><p
           style="position: absolute; bottom: 3px; right: 6px; color: aliceblue"
         >
           隱私權政策
         </p></a
       >
-      <a href="http://localhost:4200/terms"
+      <a [routerLink]="['/terms']"
         ><p
           style="
             position: absolute;
@@ -54,18 +92,10 @@
           使用者條款
         </p></a
       >
-      <a href="http://localhost:4200/about-us"
-        ><p
-          style="
-            position: absolute;
-            bottom: 3px;
-            right: 200px;
-            color: aliceblue;
-          "
-        >
+      <a [routerLink]="['/abot-us']"
+        ><p>
           關於我們
         </p></a
       >
-    </div>
-  </div>
+    </div> -->
 </footer>
