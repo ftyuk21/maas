@@ -14,6 +14,7 @@ export const routes: Routes = [
             { path: 'wishlist', loadChildren: () => import('./pages/wishlist/wishlist.module').then(m => m.WishlistModule), data: { breadcrumb: 'Wishlist' } },
             { path: 'cart', loadChildren: () => import('./pages/cart/cart.module').then(m => m.CartModule), data: { breadcrumb: 'Cart' } },
             { path: 'pickup', loadChildren: () => import('./pages/pickup/pickup.module').then(m => m.PickupModule), data: { breadcrumb: '接送' } },
+            { path: 'ordering', loadChildren: () => import('./pages/ordering/ordering.module').then(m => m.OrderingModule), data: { breadcrumb: '訂單詳細資料' } },
             { path: 'checkout', loadChildren: () => import('./pages/checkout/checkout.module').then(m => m.CheckoutModule), data: { breadcrumb: 'Checkout' } },
             { path: 'contact', loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule), data: { breadcrumb: 'Contact' } },
             // { path: 'sign-in', loadChildren: () => import('./pages/sign-in/sign-in.module').then(m => m.SignInModule), data: { breadcrumb: 'Sign In ' } },
