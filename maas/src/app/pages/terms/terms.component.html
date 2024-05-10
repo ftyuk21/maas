@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="theme-light has-background-light">
+<html class="has-background-light">
   <head>
     <meta charset="UTF-8" />
     <title>Circle - 一個專為您打造的共享乘車平台</title>
@@ -7,6 +7,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
     />
+    <!-- <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> -->
     <style>
       section.hero-img {
         background-image: url("assets/images/others/terms.jpg");
@@ -25,7 +26,7 @@
     </style>
   </head>
   <body>
-    <section class="hero is-medium hero-img">
+    <section class="hero is-medium hero-img" >
       <div class="hero-body">
         <p
           class="is-size-1 has-text-white has-text-weight-semibold mb-0 has-text-centered"
@@ -35,7 +36,7 @@
       </div>
     </section>
     <div>
-      <div class="container">
+      <div class="container" data-aos="fade-in">
         <section class="hero is-light">
           <div class="hero-body mt-5 ml-5 has-text-weight-light">
             <p class="is-size-3 my-3 has-text-weight-bold">Circle使用者條款</p>
@@ -112,6 +113,10 @@
         </section>
       </div>
     </div>
+    <!-- <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script> -->
   </body>
 </html>
 
