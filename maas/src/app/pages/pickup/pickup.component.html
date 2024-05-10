@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-content>
+    <div class="w-full h-full">
+      <div class="text-center">
+        <h1>訂單列表</h1>
+      </div>
+      <div class="grid grid-cols-4 gap-4 overflow-auto">
+        <div class="w-full" *ngFor="let d of data">
+          <mat-card>
+            <div>
+              <mat-card-content
+                ><p><b>訂單編號:</b> {{ d.id }}</p></mat-card-content
+              >
+            </div>
+            <div class="h-64" style="background-color: black;">
+                123
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
