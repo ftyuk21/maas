@@ -3,6 +3,24 @@
     <div class="flex gap-2">
       <div class="w-1/2 h-96" style="background-color: rgb(0, 0, 0)">123</div>
       <div class="w-1/2" style="background-color: bisque">
+
+        <form class="flex flex-col example-form" [formGroup]="orderForm">
+          
+          <mat-form-field class="w-64">
+            <mat-label>電話</mat-label>
+            <input matInput formControlName="phone">
+          </mat-form-field>
+        
+          <mat-form-field class="example-full-width">
+            <mat-label>地址</mat-label>
+            <input matInput placeholder="Ex.花蓮市" formControlName="address">
+          </mat-form-field>
+        
+        </form>
+
+        <button mat-raised-button color="primary" type="submit" (click)="sendOrder()">送出</button>
+
+
         <div class="relative mt-2 rounded-md shadow-sm">
             <input
             type="text"
