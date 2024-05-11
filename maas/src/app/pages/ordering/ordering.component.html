@@ -35,15 +35,10 @@
               <mat-label>乘車時間</mat-label>
               <input
                 matInput
-                [matDatepicker]="picker"
-                placeholder="MM/DD/YYYY"
+                type="time"
+                placeholder=""
                 formControlName="time"
               />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
           </div>
           <div class="flex gap-10">
