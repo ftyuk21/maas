@@ -37,6 +37,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ReactiveFormsModule } from '@angular/forms';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 import { PipesModule } from '../theme/pipes/pipes.module';
 import { RatingComponent } from './rating/rating.component';
@@ -91,7 +92,8 @@ import { LangComponent } from './lang/lang.component';
     MatTooltipModule,
     MatStepperModule,
     NgScrollbarModule,
-    PipesModule
+    PipesModule,
+    GoogleMapsModule
   ],
   exports: [
     RouterModule,
@@ -142,7 +144,8 @@ import { LangComponent } from './lang/lang.component';
     BannersComponent,
     CategoryListComponent,
     ConfirmDialogComponent,
-    LangComponent
+    LangComponent,
+    GoogleMapsModule
   ],
   declarations: [
     RatingComponent,

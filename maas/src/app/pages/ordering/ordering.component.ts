@@ -15,6 +15,13 @@ export class OrderingComponent implements OnInit {
   orderForm: UntypedFormGroup; // form
   userInfo: any = {}; // 定義 物件
 
+  center: google.maps.LatLngLiteral = { lat: 40.678178, lng: -73.944158 };
+  zoom = 7;
+  markerOptions: google.maps.MarkerOptions = { draggable: false };
+  markerPositions: google.maps.LatLngLiteral[] = [
+    { lat: 40.678178, lng: -73.944158 }
+  ];
+
   constructor(public fb: UntypedFormBuilder) {}
 
   ngOnInit() {
