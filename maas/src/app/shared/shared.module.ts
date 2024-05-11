@@ -36,6 +36,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { PipesModule } from '../theme/pipes/pipes.module';
 import { RatingComponent } from './rating/rating.component';
@@ -54,6 +55,7 @@ import { LangComponent } from './lang/lang.component';
     CommonModule,
     RouterModule,
     SwiperModule,
+    ReactiveFormsModule,
     TranslateModule,
     FlexLayoutModule,
     MatAutocompleteModule,
@@ -94,6 +96,7 @@ import { LangComponent } from './lang/lang.component';
   exports: [
     RouterModule,
     SwiperModule,
+    ReactiveFormsModule,
     TranslateModule,
     FlexLayoutModule,
     MatAutocompleteModule,
