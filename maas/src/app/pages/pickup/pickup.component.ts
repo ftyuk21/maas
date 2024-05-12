@@ -10,6 +10,13 @@ export class PickupComponent implements OnInit {
   data: any[] = [];
   constructor(private router: Router,) {}
 
+  center: google.maps.LatLngLiteral = { lat: 40.678178, lng: -73.944158 };
+  zoom = 7;
+  markerOptions: google.maps.MarkerOptions = { draggable: false };
+  markerPositions: google.maps.LatLngLiteral[] = [
+    { lat: 40.678178, lng: -73.944158 }
+  ];
+
   ngOnInit(): void {
     this.data = [
       { id: 1, code: "1111111" },

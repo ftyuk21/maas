@@ -1,22 +1,29 @@
-<mat-card>
-  <mat-card-content>
-    <div class="grid justify-items-center">
-      <div class="h-64 w-96" style="background-color: rgb(0, 0, 0)">1</div>
-      <div>
-        <div class="flex gap-5">
-          <div>
-            <mat-spinner></mat-spinner>
-          </div>
-          <div class="flex flex-col">
+<div class="flex justify-center">
+  <mat-card class="w-2/5">
+    <mat-card-content>
+      <div class="grid justify-items-center">
+        <div class="h-64 w-96" style="background-color: rgb(0, 0, 0)">
+          <google-map [center]="center" [zoom]="zoom" height="100%" width="100%">
+            <map-marker *ngFor="let markerPosition of markerPositions" [position]="markerPosition"
+              [options]="markerOptions"></map-marker>
+          </google-map>
+        </div>
+        <div>
+          <div class="flex gap-5">
             <div>
-              <p>尋找司機中</p>
-              <mat-divider class="w-64"></mat-divider>
+              <mat-spinner></mat-spinner>
             </div>
-            <div>2</div>
+            <div class="flex flex-col">
+              <div>
+                <p>尋找司機中</p>
+                <mat-divider class="w-64"></mat-divider>
+              </div>
+              <div>2</div>
+            </div>
           </div>
         </div>
+        <div style="background-color: rgb(0, 241, 241)">3</div>
       </div>
-      <div style="background-color: rgb(0, 241, 241)">3</div>
-    </div>
-  </mat-card-content>
-</mat-card>
+    </mat-card-content>
+  </mat-card>
+</div>
