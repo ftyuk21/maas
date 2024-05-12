@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-pickup",
@@ -7,7 +8,8 @@ import { Component, OnInit } from "@angular/core";
 })
 export class PickupComponent implements OnInit {
   data: any[] = [];
-  constructor() {}
+  constructor(private router: Router,) {}
+
   ngOnInit(): void {
     this.data = [
       { id: 1, code: "1111111" },
@@ -18,5 +20,10 @@ export class PickupComponent implements OnInit {
       { id: 6, code: "6666666" },
       { id: 7, code: "7777777" },
     ];
+  }
+
+  goToPickupDetail(id: any){
+    // console.log(id)
+    this.router.navigate(['/pickup/pickupdetail', id]);
   }
 }
