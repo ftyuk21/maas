@@ -4,6 +4,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { PickupComponent } from './pickup.component';
 import { RouterModule, Routes } from '@angular/router';
 import { PickupDetailComponent } from './pickup-detail/pickup-detail.component';
+import { WaitDialogComponent } from './wait-dialog/wait-dialog.component';
 export const routes: Routes = [
   { path: '', component: PickupComponent, pathMatch: 'full' },
   { path: 'pickupdetail/:id', component: PickupDetailComponent, data: { breadcrumb: '訂單詳細資料' } }
@@ -11,7 +12,8 @@ export const routes: Routes = [
 @NgModule({
   declarations: [
     PickupComponent,
-    PickupDetailComponent
+    PickupDetailComponent,
+    WaitDialogComponent
   ],
   imports: [
     CommonModule,
