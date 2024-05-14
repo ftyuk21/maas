@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { WaitDialogComponent } from '../wait-dialog/wait-dialog.component';
 
 @Component({
   selector: 'app-pickup-detail',
@@ -47,7 +49,7 @@ export class PickupDetailComponent implements OnInit {
   markerPositions: google.maps.LatLngLiteral[] = [
     { lat: 40.678178, lng: -73.944158 }
   ];
-  constructor(private route: ActivatedRoute, public http: HttpClient) { }
+  constructor(private route: ActivatedRoute, public http: HttpClient, public dialog: MatDialog) { }
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.id = params['id']; 
@@ -67,6 +69,14 @@ export class PickupDetailComponent implements OnInit {
   accept(){
     this.http.get<any>("test/hello").subscribe(data => {
       console.log(data)
+      const dialogRef = this.dialog.open(WaitDialogComponent, {
+        width: '250px', // 設置寬度
+        height: '250px', // 設置高度
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+      });
     })
   }
 
