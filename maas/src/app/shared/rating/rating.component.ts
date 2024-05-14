@@ -10,6 +10,7 @@ export class RatingComponent {
   @Input() ratingsValue:number;
   @Input() direction:string;
   @Input() showText:boolean = true;
+  @Input() canClick: boolean = false;
   avg:number;
   stars:Array<string>;
   constructor() { }
@@ -21,52 +22,56 @@ export class RatingComponent {
   }
 
   rate(value){
-    // value = (value + 1)*20;
-    // this.ratingsCount++;
-    // this.ratingsValue = this.ratingsValue + value;
-    // this.calculateAvgValue();
+    if(this.canClick == true){
+      value = (value + 1);
+      this.ratingsCount++;
+      this.ratingsValue = this.ratingsValue + value;
+      this.calculateAvgValue();
+    }else{
+      return;
+    }
   }
 
   calculateAvgValue(){
     this.avg = this.ratingsValue / this.ratingsCount;
     switch (true) {
-      case this.avg > 0 && this.avg < 20 : {
+      case this.avg > 0 && this.avg < 1 : {
           this.stars = ['star_half', 'star_border', 'star_border', 'star_border', 'star_border'];
           break;
       }      
-      case this.avg == 20 : {
+      case this.avg == 1 : {
           this.stars = ['star', 'star_border', 'star_border', 'star_border', 'star_border'];
           break;
       }      
-      case this.avg > 20 && this.avg < 40 : {
+      case this.avg > 1 && this.avg < 2 : {
           this.stars = ['star', 'star_half', 'star_border', 'star_border', 'star_border'];
           break;
       }      
-      case this.avg == 40 : {
+      case this.avg == 2 : {
         this.stars = ['star', 'star', 'star_border', 'star_border', 'star_border'];
           break;
       } 
-      case this.avg > 40 && this.avg < 60 : {
+      case this.avg > 2 && this.avg < 3 : {
           this.stars = ['star', 'star', 'star_half', 'star_border', 'star_border'];
           break;
       }
-      case this.avg == 60 : {
+      case this.avg == 3 : {
           this.stars = ['star', 'star', 'star', 'star_border', 'star_border'];
           break;
       }
-      case this.avg > 60 && this.avg < 80 : {
+      case this.avg > 3 && this.avg < 4 : {
           this.stars = ['star', 'star', 'star', 'star_half', 'star_border'];
           break;
       }
-      case this.avg == 80 : {
+      case this.avg == 4 : {
           this.stars = ['star', 'star', 'star', 'star', 'star_border'];
           break;
       } 
-      case this.avg > 80 && this.avg < 100 : {
+      case this.avg > 4 && this.avg < 5 : {
           this.stars = ['star', 'star', 'star', 'star', 'star_half'];
           break;
       } 
-      case this.avg >= 100 : {
+      case this.avg >= 5 : {
           this.stars = ['star', 'star', 'star', 'star', 'star'];
           break;
       }   
