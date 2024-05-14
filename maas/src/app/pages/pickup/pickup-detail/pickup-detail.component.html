@@ -12,17 +12,31 @@
                 <div class="flex flex-col">
                     <div class="flex flex-row my-2">
                         <h2 class="font-semibold">乘客標示：</h2>
-                        <div class="rounded-full h-"></div>
-                        <p></p>
+                        <div class="rounded-full ml-2 w-2/12 shadow-md" [ngClass]="{
+                          'green-bg': (ratingsValue/ratingsCount) >= 3.5 && (ratingsValue/ratingsCount) <= 5,
+                          'yellow-bg': (ratingsValue/ratingsCount) < 3.5 && (ratingsValue/ratingsCount) >= 2.5,
+                          'red-bg': (ratingsValue/ratingsCount) < 2.5
+                        }">
+                        </div>
                     </div>
                     <div class="flex flex-row my-2">
                         <h4 class="font-semibold">訂單號碼：</h4>
                         <p>{{order.orderCode}}</p>
                         <p class="ml-5">{{order.time}}</p>
                     </div>
-                    <div class="my-2">
-                        <app-rating [ratingsCount]="ratingsCount" [ratingsValue]="ratingsValue"
-                            [direction]="'row'"></app-rating>
+                    <div class="my-2 flex flex-row gap-2">
+                        <div class="w-1/5">
+                            <app-rating [ratingsCount]="ratingsCount" [ratingsValue]="ratingsValue"
+                                [direction]="'row'"></app-rating>
+                        </div>
+                        <div class="w-4/5">
+                            <div *ngFor="let count of progressBarCount; let i = index;" class="my-2 flex flex-row">
+                                <p class="mr-3">{{progressBarCount.length - i}}</p>
+                                <div class="w-full flex ">
+                                    <mat-progress-bar class="self-center" mode="determinate" [value]="(count / ratingsCount) * 100"></mat-progress-bar>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="flex flex-row my-2">
                         <p>{{order.startPlace}}</p>
@@ -35,18 +49,19 @@
                             <div *ngFor="let com of comment" class="flex flex-row w-full">
                                 <p class="w-1/4 pl-5 font-semibold">{{com.passengerName}}</p>
                                 <p class="w-3/4">{{com.comment}}</p>
+                                <p class="w-1/4 pl-5 text-center">{{com.rating}}</p>
                             </div>
                         </div>
                     </div>
                     <!-- <div class="rounded-btn my-2 flex flex-row justify-center gap-4"> -->
-                        <!-- <button class="goBack" mat-stroked-button color="#ff0000a9">返回</button>
+                    <!-- <button class="goBack" mat-stroked-button color="#ff0000a9">返回</button>
                         <button class="aaccept" mat-stroked-button>接受</button> -->
-                        <!-- <button class="goBack"> 返回 </button>
+                    <!-- <button class="goBack"> 返回 </button>
                         <button class="accept"> 接受 </button>
                     </div> -->
                     <div class="my-2 flex flex-row justify-center gap-4">
                         <a class="cursor-pointer goBack">返回</a>
-                        <a class="cursor-pointer accept">接受</a>
+                        <a class="cursor-pointer accept" (click)="accept()">接受</a>
                     </div>
 
                 </div>
