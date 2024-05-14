@@ -33,7 +33,7 @@ export class RatingComponent {
   }
 
   calculateAvgValue(){
-    this.avg = this.ratingsValue / this.ratingsCount;
+    this.avg = parseFloat((this.ratingsValue / this.ratingsCount).toFixed(1));
     switch (true) {
       case this.avg > 0 && this.avg < 1 : {
           this.stars = ['star_half', 'star_border', 'star_border', 'star_border', 'star_border'];
