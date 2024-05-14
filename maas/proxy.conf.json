@@ -1,0 +1,12 @@
+{
+    "/MaasService": {
+        "target": "http://localhost:8080",
+        "secure": true,
+        "changeOrigin": true
+    },
+    "/MaasService/control": {
+        "target": "http://localhost:8080",
+        "secure": true,
+        "changeOrigin": true
+    }
+}

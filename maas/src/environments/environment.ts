@@ -4,7 +4,11 @@
 
 export const environment = {
   production: false,
-  url: ''
+  url: '',
+  apiEndpoint: '/MaasService',
+  controlEndpoint: '/MaasService',
+  filePath: 'http://localhost:8000/officepie',
+  serviceFilePath: 'http://localhost:8000/officepi',
 };
 
 /*

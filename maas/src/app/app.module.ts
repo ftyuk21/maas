@@ -12,9 +12,9 @@ import { menuScrollStrategy } from './theme/utils/scroll-strategy';
 
 import { environment } from 'src/environments/environment';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader'; 
-export function HttpLoaderFactory(httpClient: HttpClient) { 
-  return new TranslateHttpLoader(httpClient, environment.url +'/assets/i18n/', '.json');
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+export function HttpLoaderFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient, environment.url + '/assets/i18n/', '.json');
 }
 
 import { SharedModule } from './shared/shared.module';
@@ -32,10 +32,11 @@ import { AppService } from './app.service';
 import { AppInterceptor } from './theme/utils/app-interceptor';
 import { OptionsComponent } from './theme/components/options/options.component';
 import { FooterComponent } from './theme/components/footer/footer.component';
+import { UrlInterceptor } from './shared/interceptors/url-interceptor';
 
 
 @NgModule({
-   imports: [
+  imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     HttpClientModule,
@@ -60,14 +61,15 @@ import { FooterComponent } from './theme/components/footer/footer.component';
     SidenavMenuComponent,
     BreadcrumbComponent,
     OptionsComponent,
-    FooterComponent    
-  ], 
+    FooterComponent
+  ],
   providers: [
     AppSettings,
-    AppService,   
+    AppService,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },
-    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
+    // { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

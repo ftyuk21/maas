@@ -1,5 +1,5 @@
 {
-  "name": "emporium",
+  "name": "maas",
   "version": "2.9.0",
   "scripts": {
     "ng": "ng",
@@ -8,10 +8,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "dev:ssr": "ng run emporium:serve-ssr",
+    "dev:ssr": "ng run maas:serve-ssr",
     "serve:ssr": "node dist/server/main.js",
-    "build:ssr": "ng build --configuration production && ng run emporium:server:production",
-    "prerender": "ng run emporium:prerender"
+    "build:ssr": "ng build --configuration production && ng run maas:server:production",
+    "prerender": "ng run maas:prerender"
   },
   "private": true,
   "dependencies": {
