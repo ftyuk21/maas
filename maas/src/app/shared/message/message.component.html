@@ -1,0 +1,17 @@
+<div class="flex flex-row w-full"
+    [ngClass]="{ 'success': type === 1, 'error': type === 2, 'info': type === 3, 'warning': type === 4, 'control': type === 5 }">
+    <div class="msgLeft w-1/4">
+        <mat-icon class="icon">{{icon}}</mat-icon>
+    </div>
+
+    <div class="msgRight flex-col w-full">
+        <div class="flex flex-row justify-between">
+            <h4 class="self-center text-2xl">{{ title }}</h4>
+            <button mat-icon-button (click)="closeSnackBar()">
+                <mat-icon style="color: rgb(0, 0, 0);">close</mat-icon>
+            </button>
+        </div>
+    
+        <p class="mr-3 mb-3 overflow-hidden">{{ message }}</p>
+    </div>
+</div>
