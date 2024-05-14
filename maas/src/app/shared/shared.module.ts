@@ -51,6 +51,8 @@ import { CategoryListComponent } from './category-list/category-list.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { LangComponent } from './lang/lang.component';
 
+import { MessageComponent } from './message/message.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -157,7 +159,8 @@ import { LangComponent } from './lang/lang.component';
     BannersComponent,
     CategoryListComponent,
     ConfirmDialogComponent,
-    LangComponent
+    LangComponent,
+    MessageComponent
   ], 
   // providers:[
   //   { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG }
