@@ -1,8 +1,10 @@
 <div class="grid grid-cols-3 gap-8">
     <div class="col-span-2">
         <google-map [center]="center" [zoom]="zoom" height="100%" width="100%">
-            <map-marker *ngFor="let markerPosition of markerPositions" [position]="markerPosition"
-                [options]="markerOptions"></map-marker>
+            <!-- <map-marker *ngFor="let markerPosition of markerPositions" [position]="markerPosition"
+                [options]="markerOptions"></map-marker> -->
+            <map-marker *ngFor="let marker of markers.position; let i = index" [position]="marker"
+                [title]="markers.options[i].title" ></map-marker>
         </google-map>
     </div>
 
@@ -33,7 +35,8 @@
                             <div *ngFor="let count of progressBarCount; let i = index;" class="my-2 flex flex-row">
                                 <p class="mr-3">{{progressBarCount.length - i}}</p>
                                 <div class="w-full flex ">
-                                    <mat-progress-bar class="self-center" mode="determinate" [value]="(count / ratingsCount) * 100"></mat-progress-bar>
+                                    <mat-progress-bar class="self-center" mode="determinate"
+                                        [value]="(count / ratingsCount) * 100"></mat-progress-bar>
                                 </div>
                             </div>
                         </div>
