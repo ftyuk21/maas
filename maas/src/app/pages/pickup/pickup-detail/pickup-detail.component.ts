@@ -1,13 +1,21 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WaitDialogComponent } from '../wait-dialog/wait-dialog.component';
 import { GoogleService } from 'src/app/shared/service/google.service';
 import { NotificationService } from 'src/app/shared/service/notification.service';
+import { GoogleMap } from "@angular/google-maps";
 
 function convertToLatLngLiteral(position: { lat: number, lng: number }): google.maps.LatLngLiteral {
   return { lat: position.lat, lng: position.lng };
+}
+
+export class Options {
+  position: google.maps.LatLngLiteral;
+  label: { color: string, text: string, fontSize: string, fontWeight: string };
+  title: string;
+  options: google.maps.MarkerOptions;
 }
 @Component({
   selector: 'app-pickup-detail',
@@ -15,8 +23,12 @@ function convertToLatLngLiteral(position: { lat: number, lng: number }): google.
   styleUrls: ['./pickup-detail.component.scss']
 })
 export class PickupDetailComponent implements OnInit {
+  @ViewChild('googleMap') googleMap: GoogleMap;
   id: any;
   comment: {}[];
+
+  directionsService: google.maps.DirectionsService;
+  directionsRenderer: google.maps.DirectionsRenderer;
 
   progressBarCount;
 
@@ -53,26 +65,26 @@ export class PickupDetailComponent implements OnInit {
 
   center: google.maps.LatLngLiteral; // 地圖中心點
   zoom = 15; // 縮放
-  markerOptions: google.maps.MarkerOptions; // 標記點(司機位置)
-  startMarkerOptions: google.maps.MarkerOptions; // 標記點(起始位置)
-  endMarkerOptions: google.maps.MarkerOptions; // 標記點(抵達位置)
-  markerPositions: google.maps.LatLngLiteral[]; // 儲存點的陣列
 
   markers: {
-    options: {
-      position: google.maps.LatLngLiteral,
-      label: { color: string, text: string },
-      title: string,
-      options: google.maps.MarkerOptions,
-    }[];
+    options: Options[];
     position: google.maps.LatLngLiteral[];
-  }
+  } = { options: [], position: [] };
 
   test = "測試"
 
   constructor(private route: ActivatedRoute,
     public http: HttpClient, public dialog: MatDialog, public map: GoogleService,
-    public msg: NotificationService) { }
+    public msg: NotificationService, private cdr: ChangeDetectorRef) {
+    this.directionsService = new google.maps.DirectionsService();
+    this.directionsRenderer = new google.maps.DirectionsRenderer({
+      polylineOptions: {
+        strokeColor: '#2828FF', // 
+        strokeOpacity: 1.0, // 不透明度
+        strokeWeight: 3 // 寬度
+      }
+    });
+  }
 
 
   ngOnInit(): void {
@@ -87,33 +99,25 @@ export class PickupDetailComponent implements OnInit {
         return count;
       });
 
-      this.map.getCoordinates(this.order.startPlace).subscribe(data => {
-        const driverPosition: google.maps.LatLngLiteral = { lat: this.latitude, lng: this.longitude };
-        this.startMarkerOptions = {
-          position: driverPosition,
-          label: '您的所在地' // 標籤
-        };
-      })
+      // this.getAndSetCoordinates(this.order.startPlace, "起始", "起始位置");
+      // this.getAndSetCoordinates(this.order.endPlace, "目的", "目的地");
 
-      this.map.getCoordinates(this.order.endPlace).subscribe(data => {
-        if (data.status == 'OK') {
-          // const endPosition: google.maps.LatLngLiteral = data.results.location;
-          this.endMarkerOptions = {
-            position: data.results.location,
-            label: '乘客目的地' // 標籤
-          };
-        }
-        console.log(data)
-
-      })
+      // this.mapReady(this.order.startPlace, this.order.endPlace)
 
     });
 
     this.map.getLocation()
       .then(coords => {
-        this.latitude = coords.latitude;
-        this.longitude = coords.longitude;
-        this.setGooglePostion();
+        this.center = { lat: coords.latitude, lng: coords.longitude }
+        const o = {
+          position: { lat: coords.latitude, lng: coords.longitude },
+          label: {
+            color: "black", text: "當前", fontSize: '15px', fontWeight: 'bold',
+          },
+          title: "當前位置",
+          options: { draggable: false },
+        }
+        this.setGooglePostion(o)
       })
       .catch(error => {
         this.msg.showError("取得當前位置錯誤，請聯繫技術人員！", "錯誤")
@@ -122,37 +126,22 @@ export class PickupDetailComponent implements OnInit {
 
   }
 
-  setGooglePostion() {
-    this.center = { lat: this.latitude, lng: this.longitude };
-    this.markerOptions = { draggable: false };
-    this.startMarkerOptions = { draggable: false };
-    this.endMarkerOptions = { draggable: false };
-    this.markerPositions = [
-      { lat: this.latitude, lng: this.longitude }, // 當前位置
-      { lat: this.latitude + 0.05, lng: this.longitude }, // 起始位置
-      { lat: this.latitude + 0.06, lng: this.longitude }, // 結束位置
-    ];
+  ngAfterViewInit() {
+    this.mapReady(this.order.startPlace, this.order.endPlace);
+  }
 
-    this.markers = {
-      options: [
-        {
-          position: convertToLatLngLiteral({ lat: this.latitude, lng: this.longitude }),
-          label: { color: 'red', text: '您的當前位置 ' },
-          title: '當前位置',
-          options: { draggable: false },
-        },
-        {
-          position: convertToLatLngLiteral({ lat: this.latitude, lng: this.longitude }),
-          label: { color: 'red', text: '您的當前位置 ' },
-          title: '當前位置',
-          options: { draggable: false },
-        },
-      ],
-      position: [
-        { lat: this.latitude, lng: this.longitude }, // 當前位置
-        { lat: this.latitude + 0.05, lng: this.longitude }, // 起始位置
-        { lat: this.latitude + 0.06, lng: this.longitude }, // 結束位置
-      ]
+  setGooglePostion(postion: Options) {
+    this.markers.options.push(postion as Options)
+    this.markers.position.push(postion.position)
+    // console.log(this.markers)
+    this.reloadMap()
+  }
+
+  // 重新加载地图
+  reloadMap() {
+    if (this.googleMap) {
+      // 调用 ChangeDetectorRef 的 detectChanges 方法手动触发变化检测
+      this.cdr.detectChanges();
     }
   }
 
@@ -168,6 +157,48 @@ export class PickupDetailComponent implements OnInit {
         console.log('The dialog was closed');
       });
     })
+  }
+
+  getAndSetCoordinates(place: string, label: string, title: string) {
+    this.map.getCoordinates(place).subscribe(data => {
+      if (data.status == "OK") {
+        const o = {
+          position: data.results[0].geometry.location,
+          label: {
+            color: "black", text: label, fontSize: '15px', fontWeight: 'bold',
+          },
+          title: title,
+          options: { draggable: false },
+        };
+        this.setGooglePostion(o);
+      } else {
+        this.msg.showError('訂單取得不成功，請聯繫技術人員！');
+      }
+    });
+  }
+
+
+
+  // 地圖載好後化路線
+  mapReady(startPlace, endPlace) {
+    this.directionsRenderer.setMap(this.googleMap.googleMap);
+    this.calculateAndDisplayRoute(startPlace, endPlace);
+  }
+
+  // 計算並顯示路線
+  calculateAndDisplayRoute(startPlace, endPlace) {
+    const start = startPlace; // 起
+    const end = endPlace; // 終點
+    const request = {
+      origin: start,
+      destination: end,
+      travelMode: google.maps.TravelMode.DRIVING // 設為駕駛模式
+    };
+    this.directionsService.route(request, (result, status) => {
+      if (status === google.maps.DirectionsStatus.OK) {
+        this.directionsRenderer.setDirections(result);
+      }
+    });
   }
 
 }

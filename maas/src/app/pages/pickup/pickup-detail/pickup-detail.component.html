@@ -1,10 +1,8 @@
 <div class="grid grid-cols-3 gap-8">
     <div class="col-span-2">
-        <google-map [center]="center" [zoom]="zoom" height="100%" width="100%">
-            <!-- <map-marker *ngFor="let markerPosition of markerPositions" [position]="markerPosition"
-                [options]="markerOptions"></map-marker> -->
+        <google-map #googleMap [center]="center" [zoom]="zoom" height="100%" width="100%">
             <map-marker *ngFor="let marker of markers.position; let i = index" [position]="marker"
-                [title]="markers.options[i].title" ></map-marker>
+                [title]="markers.options[i].title" [label]="markers.options[i].label"></map-marker>
         </google-map>
     </div>
 

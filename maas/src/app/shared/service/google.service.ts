@@ -19,7 +19,6 @@ export class GoogleService {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            console.log(123)
             resolve(position.coords);
           },
           (error) => {
