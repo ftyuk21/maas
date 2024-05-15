@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -48,7 +48,7 @@ export class OrderingComponent implements OnInit {
 
   constructor(public fb: UntypedFormBuilder, private route: ActivatedRoute, private router: Router,
     public http: HttpClient, public map: GoogleService,
-    public msg: NotificationService) { }
+    public msg: NotificationService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     // 取得資料
@@ -99,11 +99,11 @@ export class OrderingComponent implements OnInit {
 
 
     this.orderForm.get('startLocation').valueChanges.subscribe(value => {
-      this.showInMap(value, '起始地');
+      this.showInMap(value, '起始');
     });
 
     this.orderForm.get('destination').valueChanges.subscribe(value => {
-      this.showInMap(value, '目的地');
+      this.showInMap(value, '目的');
     });
   }
 
@@ -128,51 +128,33 @@ export class OrderingComponent implements OnInit {
   setGooglePostion(postion: Options) {
     this.markers.options.push(postion as Options)
     this.markers.position.push(postion.position)
-    console.log(this.markers)
-
-    // this.markers = {
-    //   options: [
-    //     {
-    //       position: convertToLatLngLiteral({ lat: this.latitude, lng: this.longitude }),
-    //       label: { color: 'red', text: '您的當前位置 ' },
-    //       title: '當前位置',
-    //       options: { draggable: false },
-    //     },
-    //     {
-    //       position: convertToLatLngLiteral({ lat: this.latitude, lng: this.longitude }),
-    //       label: { color: 'red', text: '您的當前位置 ' },
-    //       title: '當前位置',
-    //       options: { draggable: false },
-    //     },
-    //   ],
-    //   position: [
-    //     { lat: this.latitude, lng: this.longitude }, // 當前位置
-    //     { lat: this.latitude + 0.05, lng: this.longitude }, // 起始位置
-    //     { lat: this.latitude + 0.06, lng: this.longitude }, // 結束位置
-    //   ]
-    // }
+    // console.log(this.markers)
+    this.reloadMap()
   }
 
   showInMap(value: string, type: string) {
     this.map.getCoordinates(value).subscribe(data => {
-      console.log(data)
       if (data.status == "OK") {
         if (type == '起始') {
           const o = {
             position: data.results[0].geometry.location,
             label: {
-              color: "black", text: "當前", fontSize: '15px', fontWeight: 'bold',
+              color: "black", text: "起始", fontSize: '15px', fontWeight: 'bold',
             },
-            title: "當前位置",
+            title: "起始位置",
             options: { draggable: false },
           }
-          console.log(this.markers)
           this.setGooglePostion(o)
-
-
-          console.log(data)
         } else {
-
+          const o = {
+            position: data.results[0].geometry.location,
+            label: {
+              color: "black", text: "目的", fontSize: '15px', fontWeight: 'bold',
+            },
+            title: "目的地",
+            options: { draggable: false },
+          }
+          this.setGooglePostion(o)
         }
       } else {
         this.msg.showError('請輸入有效地址');
@@ -184,13 +166,8 @@ export class OrderingComponent implements OnInit {
   // 重新加载地图
   reloadMap() {
     if (this.googleMap) {
-      const bounds = new google.maps.LatLngBounds();
-      for (const position of this.markers.position) {
-        bounds.extend(position);
-      }
-
-      // 调整地图以适应边界
-      this.googleMap.fitBounds(bounds);
+      // 调用 ChangeDetectorRef 的 detectChanges 方法手动触发变化检测
+      this.cdr.detectChanges();
     }
   }
 
