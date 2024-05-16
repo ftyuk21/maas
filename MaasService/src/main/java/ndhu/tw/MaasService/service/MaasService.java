@@ -3,8 +3,10 @@ package ndhu.tw.MaasService.service;
 import ndhu.tw.MaasService.model.request.BookingRequestModel;
 import ndhu.tw.MaasService.model.response.BookingResponseModel;
 import org.springframework.stereotype.Service;
-
+import ndhu.tw.MaasService.model.response.AvailableBookingsResponseModel;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MaasService {
@@ -21,5 +23,17 @@ public class MaasService {
 
         return new BookingResponseModel(orderNumber, status);
     }
+
+    private List<AvailableBookingsResponseModel.BookingDetails> availableBookings;
+
+    public void setAvailableBookings(List<AvailableBookingsResponseModel.BookingDetails> availableBookings) {
+        this.availableBookings = availableBookings;
+    }
+
+    public AvailableBookingsResponseModel getAllAvailableBookings() {
+        return new AvailableBookingsResponseModel(availableBookings);
+    }
+
 }
+
 
