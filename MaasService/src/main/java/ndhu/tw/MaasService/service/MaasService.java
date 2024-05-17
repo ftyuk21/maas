@@ -1,5 +1,6 @@
 package ndhu.tw.MaasService.service;
 
+import org.springframework.data.domain.Example;
 import ndhu.tw.MaasService.db.model.Orders;
 import ndhu.tw.MaasService.db.repository.OrdersRepository;
 import ndhu.tw.MaasService.model.BaseModel;
@@ -36,14 +37,20 @@ public class MaasService {
         return response;
     }
 
-    private List<AvailableBookingsResponseModel.BookingDetails> availableBookings;
+//    private List<AvailableBookingsResponseModel.BookingDetails> availableBookings;
+//
+//    public void setAvailableBookings(List<AvailableBookingsResponseModel.BookingDetails> availableBookings) {
+//        this.availableBookings = availableBookings;
+//    }
 
-    public void setAvailableBookings(List<AvailableBookingsResponseModel.BookingDetails> availableBookings) {
-        this.availableBookings = availableBookings;
-    }
-
-    public AvailableBookingsResponseModel getAllAvailableBookings() {
-        return new AvailableBookingsResponseModel(availableBookings);
+    public BaseModel getAllAvailableBookings() {
+        Orders o= new Orders();
+        o.setStatusCode(2L);
+        Example<Orders> example=Example.of(o);
+        List<Orders> ordersList = ordersRepository.findAll(example);
+        BaseModel response=new BaseModel();
+        response.setData(ordersList);
+        return response;
     }
 
 }

@@ -2,6 +2,7 @@ package ndhu.tw.MaasService.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import ndhu.tw.MaasService.model.BaseModel;
 import ndhu.tw.MaasService.model.response.AvailableBookingsResponseModel;
 import ndhu.tw.MaasService.service.MaasService;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ public class AvailableBookings{
     @Operation(summary = "Get Available Bookings API")
     @GetMapping(value = "/available-bookings", produces = "application/json")
     public @ResponseBody
-    AvailableBookingsResponseModel getAvailableBookings() {
+    BaseModel getAvailableBookings() {
         // 使用 MaasService 中的方法來獲取可接單列表
         return maasService.getAllAvailableBookings();
     }

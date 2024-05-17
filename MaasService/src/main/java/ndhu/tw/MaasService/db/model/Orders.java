@@ -44,4 +44,7 @@ public class Orders implements Serializable {
     @Column(name = "order_code", nullable = false)
     private String orderCode;
 
+    @Column(name = "status_code", nullable = false)
+    private Long statusCode;
+
 }
