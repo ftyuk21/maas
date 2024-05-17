@@ -10,6 +10,8 @@ export class PickupComponent implements OnInit {
   data: any[] = [];
   constructor(private router: Router,) {}
 
+  
+
   center: google.maps.LatLngLiteral = { lat: 40.678178, lng: -73.944158 };
   zoom = 7;
   markerOptions: google.maps.MarkerOptions = { draggable: false };
@@ -33,4 +35,6 @@ export class PickupComponent implements OnInit {
     // console.log(id)
     this.router.navigate(['/pickup/pickupdetail', id]);
   }
+
+  
 }

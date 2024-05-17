@@ -1,3 +1,7 @@
 .mat-mdc-input-element::-webkit-calendar-picker-indicator {
     display: block;
 }
+
+:host ::ng-deep .mdc-text-field{
+    border-radius: 20px;
+}
