@@ -1,22 +1,23 @@
 package ndhu.tw.MaasService.service;
 
-import ndhu.tw.MaasService.db.model.Order;
-import ndhu.tw.MaasService.db.repository.OrderRepository;
+import ndhu.tw.MaasService.db.model.Orders;
+import ndhu.tw.MaasService.db.repository.OrdersRepository;
 import ndhu.tw.MaasService.model.BaseModel;
-import ndhu.tw.MaasService.model.request.BookingRequestModel;
-import ndhu.tw.MaasService.model.response.BookingResponseModel;
-import org.springframework.stereotype.Service;
 import ndhu.tw.MaasService.model.response.AvailableBookingsResponseModel;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @Service
 public class MaasService {
-    private final OrderRepository orderRepository;
-    public MaasService(OrderRepository  orderRepository) {
-        this.orderRepository = orderRepository;
+    private final OrdersRepository ordersRepository;
+    public MaasService(OrdersRepository  ordersRepository) {
+        this.ordersRepository = ordersRepository;
     }
-    public BaseModel createBooking(Order request) {
+    public BaseModel createBooking(Orders request) {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 7; i++) {
@@ -24,7 +25,8 @@ public class MaasService {
         }
         String orderNumber = "ORD"+sb; // 假設生成一個訂單編號
         request.setOrderCode(orderNumber);
-        orderRepository.save(request);
+        ordersRepository.save(request);
+//        ordersRepository.save(request);
         Map<String, Object> order = new HashMap<>();
         order.put("orderNumber", orderNumber);
         order.put("status", "等待接單");
