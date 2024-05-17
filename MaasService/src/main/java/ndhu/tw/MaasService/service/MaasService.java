@@ -1,11 +1,16 @@
 package ndhu.tw.MaasService.service;
 
+import io.swagger.v3.oas.annotations.Operation;
+import ndhu.tw.MaasService.model.request.GetBookingRequestModel;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Example;
 import ndhu.tw.MaasService.db.model.Orders;
 import ndhu.tw.MaasService.db.repository.OrdersRepository;
 import ndhu.tw.MaasService.model.BaseModel;
 import ndhu.tw.MaasService.model.response.AvailableBookingsResponseModel;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +58,24 @@ public class MaasService {
         return response;
     }
 
+    }
+
+
+    public BaseModel getBooking(GetBookingRequestModel request) {
+        BaseModel response=new BaseModel();
+        try{
+            Orders o = new Orders();
+            o.setStatusCode(request.getStatusCode);
+            o.setDriverId(request.getUserID);
+            orderRepository.save(o);
+            response.setData("成功");
+        }catch(DataAccessException e){
+            o.setMessage(e.getMessage().toString());
+            o.setCode("9999");
+        }
+
+        return response;
+    }
 }
 
 
