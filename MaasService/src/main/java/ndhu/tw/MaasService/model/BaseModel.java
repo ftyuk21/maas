@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseModel {
-    private Boolean result = true;
+//    private Boolean result = true;
     private Object data;
     private String code = "0000";
     private String message = "";

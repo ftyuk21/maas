@@ -2,6 +2,7 @@ package ndhu.tw.MaasService.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import ndhu.tw.MaasService.db.model.Order;
 import ndhu.tw.MaasService.model.BaseModel;
 import ndhu.tw.MaasService.model.request.BookingRequestModel;
 import ndhu.tw.MaasService.model.response.BookingResponseModel;
@@ -23,7 +24,7 @@ public class BookingController {
     @Operation(summary = "Create Booking API")
     @PostMapping(value = "/bookings", produces = "application/json")
     public @ResponseBody
-    BookingResponseModel createBooking(@RequestBody BookingRequestModel request) {
+    BaseModel createBooking(@RequestBody Order request) {
         return maasService.createBooking(request);
     }
 }
