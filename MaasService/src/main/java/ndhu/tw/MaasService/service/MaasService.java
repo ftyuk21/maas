@@ -58,20 +58,22 @@ public class MaasService {
         return response;
     }
 
-    }
 
 
     public BaseModel getBooking(GetBookingRequestModel request) {
         BaseModel response=new BaseModel();
         try{
-            Orders o = new Orders();
-            o.setStatusCode(request.getStatusCode);
-            o.setDriverId(request.getUserID);
-            orderRepository.save(o);
+            Orders o= new Orders();
+            o.setOrderId(request.getOrderID());
+            Example<Orders> example=Example.of(o);
+            Orders findOrder = ordersRepository.findAll(example).get(0);
+            findOrder.setStatusCode(1L);
+            findOrder.setDriverId(request.getUserID());
+            ordersRepository.save(findOrder);
             response.setData("成功");
         }catch(DataAccessException e){
-            o.setMessage(e.getMessage().toString());
-            o.setCode("9999");
+            response.setMessage(e.getMessage().toString());
+            response.setCode("9999");
         }
 
         return response;

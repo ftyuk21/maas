@@ -6,4 +6,5 @@ import lombok.Data;
 public class GetBookingRequestModel {
     private Long userID;
     private Long statusCode;
+    private Long orderID;
 }
