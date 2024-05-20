@@ -1,6 +1,11 @@
 package ndhu.tw.MaasService.model.request;
 
-// You may not need any specific request parameters for this endpoint
+
+import lombok.Data;
+
+@Data
 public class CheckOrderRequestModel {
-    // Add any required fields or methods
+    private Long customerID;
+    private Long statusCode;
+    private Long orderID;
 }

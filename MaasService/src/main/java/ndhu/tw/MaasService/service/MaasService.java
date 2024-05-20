@@ -45,7 +45,7 @@ public class MaasService {
 //        this.availableBookings = availableBookings;
 //    }
 
-    public BaseModel getAllAvailableBookings() {
+    public BaseModel AvailableBookingRequestModel() {
         Orders o= new Orders();
         o.setStatusCode(2L);
         Example<Orders> example=Example.of(o);
@@ -79,6 +79,7 @@ public class MaasService {
     public BaseModel CheckOrder(CheckOrderRequestModel request) {
         Orders o= new Orders();
         o.setStatusCode(1L);
+//        o.setCustomerId();
         Example<Orders> example=Example.of(o);
         List<Orders> ordersList = ordersRepository.findAll(example);
         BaseModel response=new BaseModel();
