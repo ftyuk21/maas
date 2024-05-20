@@ -90,16 +90,16 @@ public class MaasService {
     /*
     * 1.2 接送者查看訂單
     * */
-    public BaseModel CheckOrder() {
+    public BaseModel CheckOrder(Long customerId) {
         Orders o= new Orders();
-        o.setStatusCode(1L);
-//        o.setCustomerId();
+        o.setCustomerId(customerId);
         Example<Orders> example=Example.of(o);
         List<Orders> ordersList = ordersRepository.findAll(example);
         BaseModel response=new BaseModel();
         response.setData(ordersList);
         return response;
     }
+
 }
 
 

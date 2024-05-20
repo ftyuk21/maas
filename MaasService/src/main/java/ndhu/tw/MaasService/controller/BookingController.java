@@ -35,7 +35,7 @@ public class BookingController {
     public @ResponseBody
     BaseModel CheckOrder(@Parameter(description = "乘車者ID") @RequestParam(required = false)  Long custormerID) {
         // 使用 MaasService 中的方法來獲取可接單列表
-        return maasService.CheckOrder();
+        return maasService.CheckOrder(custormerID);
     }
 }
 
