@@ -31,7 +31,7 @@ public class BookingController {
 
 
     @Operation(summary = "1.2 乘車者查看訂單")
-    @GetMapping(value = "/available booking", produces = "application/json")
+    @GetMapping(value = "/available-booking", produces = "application/json")
     public @ResponseBody
     BaseModel CheckOrder(@Parameter(description = "乘車者ID") @RequestParam(required = false)  Long custormerID) {
         // 使用 MaasService 中的方法來獲取可接單列表

@@ -25,7 +25,7 @@ public class AvailableBookings{
     public @ResponseBody
     BaseModel getAvailableBookings() {
         // 使用 MaasService 中的方法來獲取可接單列表
-        return maasService.getAllAvailableBookings();
+        return maasService.getAvailableBookings();
     }
 
 
