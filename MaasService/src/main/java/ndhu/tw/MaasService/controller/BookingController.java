@@ -5,8 +5,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import ndhu.tw.MaasService.db.model.Orders;
 import ndhu.tw.MaasService.model.BaseModel;
-import ndhu.tw.MaasService.model.request.BookingRequestModel;
-import ndhu.tw.MaasService.model.response.BookingResponseModel;
 import ndhu.tw.MaasService.service.MaasService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

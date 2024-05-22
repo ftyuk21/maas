@@ -3,8 +3,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import ndhu.tw.MaasService.model.BaseModel;
 import ndhu.tw.MaasService.model.request.ArrivedRequestModel;
-import ndhu.tw.MaasService.model.request.GetBookingRequestModel;
-import ndhu.tw.MaasService.model.response.AvailableBookingsResponseModel;
 import ndhu.tw.MaasService.service.MaasService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

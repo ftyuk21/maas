@@ -1,7 +1,6 @@
 package ndhu.tw.MaasService.service;
 
 import ndhu.tw.MaasService.model.request.ArrivedRequestModel;
-import ndhu.tw.MaasService.model.request.CheckOrderRequestModel;
 import ndhu.tw.MaasService.model.request.GetBookingRequestModel;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Example;
