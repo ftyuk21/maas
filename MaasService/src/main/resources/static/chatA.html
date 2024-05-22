@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room A</title>
+    <style>
+        #chat-box {
+            width: 300px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #messages {
+            height: 200px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="chat-box">
+    <div id="messages"></div>
+    <div id="connection-time"></div>
+    <input type="text" id="message-input" placeholder="Type your message...">
+    <button id="send-button">Send</button>
+</div>
+
+<script>
+    const messagesContainerA = document.getElementById('messages');
+    const messageInputA = document.getElementById('message-input');
+    const sendButtonA = document.getElementById('send-button');
+    const connectionTimeElementA = document.getElementById('connection-time');
+
+    // WebSocket connection for Chat Room A
+    const socketA = new WebSocket('ws://localhost:8080/MaasService/customerChat');
+
+    // Function to display message in Chat Room A
+    function displayMessageA(message) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        messagesContainerA.appendChild(messageElement);
+        messagesContainerA.scrollTop = messagesContainerA.scrollHeight;
+    }
+
+    // Event listener for Send button click in Chat Room A
+    sendButtonA.addEventListener('click', () => {
+        const message = messageInputA.value.trim();
+        if (message !== '') {
+            socketA.send(message); // Send message to its own chat room
+            messageInputA.value = '';
+            displayMessageA(`You: ${message}`);
+        }
+    });
+
+    // Event listener for Enter key press in message input in Chat Room A
+    messageInputA.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendButtonA.click();
+        }
+    });
+
+    // Event listener for WebSocket messages in Chat Room A
+    socketA.addEventListener('message', (event) => {
+        const message = event.data;
+        displayMessageA(`Other: ${message}`);
+    });
+
+    // Event listener for WebSocket connection open in Chat Room A
+    socketA.addEventListener('open', () => {
+        const connectionTime = new Date().toLocaleString();
+        connectionTimeElementA.textContent = `以使用乘車者身份連線: ${connectionTime}`;
+    });
+</script>
+</body>
+</html>
