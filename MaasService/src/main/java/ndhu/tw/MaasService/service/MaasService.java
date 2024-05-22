@@ -76,7 +76,7 @@ public class MaasService {
             Example<Orders> example=Example.of(o);
             Orders findOrder = ordersRepository.findAll(example).get(0);
             findOrder.setStatusCode(1L);
-            findOrder.setDriverId(request.getUserID());
+            findOrder.setDriverId(request.getDriverID());
             ordersRepository.save(findOrder);
             response.setData("成功");
         }catch(DataAccessException e){
