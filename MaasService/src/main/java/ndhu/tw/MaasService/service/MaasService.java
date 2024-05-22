@@ -1,5 +1,6 @@
 package ndhu.tw.MaasService.service;
 
+import ndhu.tw.MaasService.model.request.ArrivedRequestModel;
 import ndhu.tw.MaasService.model.request.CheckOrderRequestModel;
 import ndhu.tw.MaasService.model.request.GetBookingRequestModel;
 import org.springframework.dao.DataAccessException;
@@ -32,6 +33,7 @@ public class MaasService {
         }
         String orderNumber = "ORD"+sb; // 假設生成一個訂單編號
         request.setOrderCode(orderNumber);
+        request.setStatusCode(2L);
         ordersRepository.save(request);
 //        ordersRepository.save(request);
         Map<String, Object> order = new HashMap<>();
@@ -42,12 +44,6 @@ public class MaasService {
         response.setData(order);
         return response;
     }
-
-//    private List<AvailableBookingsResponseModel.BookingDetails> availableBookings;
-//
-//    public void setAvailableBookings(List<AvailableBookingsResponseModel.BookingDetails> availableBookings) {
-//        this.availableBookings = availableBookings;
-//    }
 
 
     /*
@@ -99,7 +95,34 @@ public class MaasService {
         response.setData(ordersList);
         return response;
     }
-
+    /*
+     * 3.3 到達目的地
+     * */
+    public BaseModel ApiCloud(ArrivedRequestModel request) {
+        BaseModel response=new BaseModel();
+        try{
+            Orders o= new Orders();
+            o.setOrderId(request.getOrderId());
+            Example<Orders> example=Example.of(o);
+            Orders findOrder = ordersRepository.findAll(example).get(0);
+            if(request.getIdentity()==2)
+            {
+                findOrder.setStatusCode(3L);
+                ordersRepository.save(findOrder);
+                response.setData("成功");
+            }
+            else if(request.getIdentity()==1&&findOrder.getStatusCode()==3)
+            {
+                findOrder.setStatusCode(99L);
+                ordersRepository.save(findOrder);
+                response.setData("成功");
+            }
+        }catch(DataAccessException e){
+            response.setMessage(e.getMessage().toString());
+            response.setCode("9999");
+        }
+        return response;
+    }
 }
 
 
