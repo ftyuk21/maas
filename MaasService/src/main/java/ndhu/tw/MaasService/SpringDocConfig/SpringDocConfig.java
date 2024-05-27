@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 	info = @Info(
 		title = "MaasService",
 		version = "1.0.0",
-		description = "流程: 1.1 -> 2.1 -> 2.2 -> 1.2"
+		description = "流程: 1.1 -> 2.1 -> 2.2 -> 1.2 -> 3.3"
 	),
 	servers = {
   	@Server(url = "${server.swagger.url}", description = "Default Server URL")
