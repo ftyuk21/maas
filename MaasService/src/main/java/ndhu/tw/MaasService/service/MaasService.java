@@ -1,6 +1,7 @@
 package ndhu.tw.MaasService.service;
 
 import ndhu.tw.MaasService.model.request.ArrivedRequestModel;
+import ndhu.tw.MaasService.model.request.CommentRequestModel;
 import ndhu.tw.MaasService.model.request.GetBookingRequestModel;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Example;
@@ -9,10 +10,7 @@ import ndhu.tw.MaasService.db.repository.OrdersRepository;
 import ndhu.tw.MaasService.model.BaseModel;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class MaasService {
@@ -120,6 +118,33 @@ public class MaasService {
             response.setMessage(e.getMessage().toString());
             response.setCode("9999");
         }
+        return response;
+    }
+
+    /*
+     * 3.2 撰寫評價
+     * */
+    public BaseModel ApiCloud(CommentRequestModel request) {
+        BaseModel response = new BaseModel();
+        Optional<Orders> findOrderOpt = ordersRepository.findAllById(Long.valueOf(request.getOrderId()));
+        if (!findOrderOpt.isPresent()) {
+            response.setData("訂單不存在");
+            return response;
+        }
+            Orders findOrder = findOrderOpt.get();
+        // 根據身份設置評論和星等
+        if (request.getIdentity() == 1) { // 乘車者
+            findOrder.setDrivercomment(request.getComment());
+            findOrder.setDriverstar(Long.valueOf(request.getStar()));
+        } else if (request.getIdentity() == 2) { // 接送者
+            findOrder.setCustomercomment(request.getComment());
+            findOrder.setCustomerstar(Long.valueOf(request.getStar()));
+        } else {
+            response.setData("身份無效");
+            return response;
+        }
+        ordersRepository.save(findOrder);
+        response.setData("成功");
         return response;
     }
 }

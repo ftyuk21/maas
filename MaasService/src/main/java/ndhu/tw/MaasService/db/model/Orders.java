@@ -46,5 +46,25 @@ public class Orders implements Serializable {
 
     @Column(name = "status_code", nullable = false)
     private Long statusCode;
+    /**
+     * 乘客對司機評論
+     */
+    @Column(name = "drivercomment")
+    private String drivercomment;
+    /**
+     * 司機對乘客評論
+     */
+    @Column(name = "customercomment")
+    private String customercomment;
+    /**
+     * 乘客對司機星等
+     */
+    @Column(name = "driverstar")
+    private Long driverstar;
+    /**
+     * 司機對乘客星等
+     */
+    @Column(name = "customerstar")
+    private Long customerstar;
 
 }
