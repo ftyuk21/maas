@@ -7,7 +7,6 @@ import ndhu.tw.MaasService.model.request.GetBookingRequestModel;
 import ndhu.tw.MaasService.service.MaasService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @Tag(name = "接送者")
 @Controller
 @RequestMapping(value = "/driver")
@@ -31,7 +30,7 @@ public class AvailableBookings{
     @Operation(summary = "2.2 接送者接單")
     @PostMapping(value = "/getBooking", produces = "application/json")
     public @ResponseBody
-    BaseModel getBooking(@RequestBody(description = "GetBookingRequestModel") GetBookingRequestModel request) {
+    BaseModel getBooking(@RequestBody GetBookingRequestModel request) {
         return maasService.getBooking(request);
     }
 }

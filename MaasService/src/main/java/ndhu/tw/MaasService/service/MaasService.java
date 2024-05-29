@@ -124,7 +124,7 @@ public class MaasService {
     /*
      * 3.2 撰寫評價
      * */
-    public BaseModel ApiCloud(CommentRequestModel request) {
+    public BaseModel comment(CommentRequestModel request) {
         BaseModel response = new BaseModel();
         Optional<Orders> findOrderOpt = ordersRepository.findById(request.getOrderId());
         if (!findOrderOpt.isPresent()) {
