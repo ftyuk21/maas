@@ -126,7 +126,7 @@ public class MaasService {
      * */
     public BaseModel ApiCloud(CommentRequestModel request) {
         BaseModel response = new BaseModel();
-        Optional<Orders> findOrderOpt = ordersRepository.findAllById(Long.valueOf(request.getOrderId()));
+        Optional<Orders> findOrderOpt = ordersRepository.findById(request.getOrderId());
         if (!findOrderOpt.isPresent()) {
             response.setData("訂單不存在");
             return response;
