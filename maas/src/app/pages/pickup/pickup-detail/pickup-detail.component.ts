@@ -6,6 +6,7 @@ import { WaitDialogComponent } from '../wait-dialog/wait-dialog.component';
 import { GoogleService } from 'src/app/shared/service/google.service';
 import { NotificationService } from 'src/app/shared/service/notification.service';
 import { GoogleMap } from "@angular/google-maps";
+import { BehaviorSubject } from 'rxjs';
 
 function convertToLatLngLiteral(position: { lat: number, lng: number }): google.maps.LatLngLiteral {
   return { lat: position.lat, lng: position.lng };
@@ -31,6 +32,8 @@ export class PickupDetailComponent implements OnInit {
   directionsRenderer: google.maps.DirectionsRenderer;
 
   progressBarCount;
+
+  pickUpDetail= {}; // 訂單詳細資料
 
   order = {
     orderId: 5,
@@ -89,6 +92,7 @@ export class PickupDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
+      this.getLocalStorage()
       this.id = params['id'];
       this.comment = this.order.comment;
       this.ratingsCount = this.order.comment.length;
@@ -200,5 +204,20 @@ export class PickupDetailComponent implements OnInit {
       }
     });
   }
+
+  getLocalStorage() {
+    const value = localStorage.getItem('pickUpDetail');
+    this.pickUpDetail = JSON.parse(value)
+  }
+
+  // getPickUpDetail(orderId: number){
+  //   this.http.get<any>("driver/available-bookings",).subscribe(data => {
+  //     if (data.code == "0000") {
+  //       this.pickUpDetail$.next(data.data)
+  //     } else {
+  //       this.msg.showError("無法取得可接訂單資料，請聯繫技術人員！")
+  //     }
+  //   })
+  // }
 
 }

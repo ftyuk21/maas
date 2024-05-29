@@ -4,20 +4,24 @@
       <div class="text-center">
         <h1>訂單列表</h1>
       </div>
-      <div class="grid grid-cols-4 gap-4 overflow-auto">
-        <div class="w-full cursor-pointer littleCard" *ngFor="let d of data" (click)="goToPickupDetail(d.id)">
+      <div class="grid grid-cols-4 gap-4 overflow-auto" *ngIf="pickUpList$ | async as pickUpList">
+        <div class="w-full cursor-pointer littleCard" *ngFor="let pickUp of pickUpList" >
           <mat-card>
-            <div>
-              <mat-card-content
-                ><p><b>訂單編號:</b> {{ d.id }}</p></mat-card-content
-              >
+            <div (click)="goToPickupDetail(pickUp.orderId,pickUp)">
+              <mat-card-content>
+                <p><b>訂單編號:</b> {{ pickUp.orderCode }}</p>
+                <p><b>上車地點:</b> {{ pickUp.startLocation }}</p>
+                <p><b>下車地點:</b> {{ pickUp.destination }}</p>
+                <p><b>上車時間:</b> {{ pickUp.pickupTime | customDate}}</p>
+                <p><b>價格區間:</b> {{ pickUp.priceRangeDown }} ～ {{ pickUp.priceRangeUp }}</p>
+              </mat-card-content>
             </div>
-            <div class="h-64" style="background-color: black;">
-                <google-map [center]="center" [zoom]="zoom" height="100%" width="100%">
-                  <map-marker *ngFor="let markerPosition of markerPositions" [position]="markerPosition"
-                    [options]="markerOptions"></map-marker>
-                </google-map>
-            </div>
+            <!-- <div class="h-64" style="background-color: black;">
+              <google-map #googleMap [center]="center" [zoom]="zoom" height="100%" width="100%">
+                <map-marker *ngFor="let marker of pickUp.markers.postions; let i = index" [position]="marker"
+                  [title]="pickUp.markers.option[i].title" [label]="pickUp.markers.option[i].label"></map-marker>
+              </google-map>
+            </div> -->
           </mat-card>
         </div>
       </div>
