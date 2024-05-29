@@ -4,6 +4,8 @@ import ndhu.tw.MaasService.db.model.UserInfo;
 import ndhu.tw.MaasService.db.repository.UserInfoRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,14 +37,27 @@ public class AuthenticationService {
     }
 
     public UserInfo authenticate(LoginUserDto input) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        input.getAccount(),
-                        input.getPassword()
-                )
-        );
-
-        return userInfoRepository.findByAccount(input.getAccount())
-                .orElseThrow();
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            input.getAccount(),
+                            input.getPassword()
+                    )
+            );
+        } catch (AuthenticationException e) {
+            throw new UsernameNotFoundException("Invalid username or password");
+        } finally {
+            return userInfoRepository.findByAccount(input.getAccount())
+                    .orElse(null);
+        }
+//        authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(
+//                        input.getAccount(),
+//                        input.getPassword()
+//                )
+//        );
+//
+//        return userInfoRepository.findByAccount(input.getAccount())
+//                .orElseThrow();
     }
 }

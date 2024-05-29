@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    @SecurityRequirement(name = "Bearer Authentication")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<UserInfo> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

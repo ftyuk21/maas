@@ -29,11 +29,15 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
         UserInfo authenticatedUser = authenticationService.authenticate(loginUserDto);
 
-        String jwtToken = jwtService.generateToken(authenticatedUser);
-
         LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken(jwtToken);
-        loginResponse.setExpiresIn(jwtService.getExpirationTime());
+        if (authenticatedUser == null) {
+            loginResponse.setCode("9999");
+        }else {
+            String jwtToken = jwtService.generateToken(authenticatedUser);
+            loginResponse.setToken(jwtToken);
+            loginResponse.setExpiresIn(jwtService.getExpirationTime());
+            loginResponse.setCode("0000");
+        }
 
         return ResponseEntity.ok(loginResponse);
     }

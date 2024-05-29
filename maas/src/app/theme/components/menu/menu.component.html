@@ -83,6 +83,14 @@
     <a href=""><img class="w-36" src="assets/images/others/LOGO.png" alt=""></a>
     <a mat-button routerLink="/ordering" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">我要坐車</a>
     <a mat-button routerLink="/pickup" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">我要接單</a>
-    <a mat-button routerLink="/sign-in" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">登入</a>
+    <!-- <a mat-button routerLink="/sign-in" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">登入</a> -->
+
+    <ng-container *ngIf="authService.isLoggedIn(); else loginTemplate">
+        <button mat-button (click)="logout()">登出</button>
+    </ng-container>
+    <ng-template #loginTemplate>
+        <a mat-button routerLink="/sign-in" routerLinkActive="horizontal-active-link"
+            [routerLinkActiveOptions]="{exact:true}">登入</a>
+    </ng-template>
 </mat-toolbar>
 
