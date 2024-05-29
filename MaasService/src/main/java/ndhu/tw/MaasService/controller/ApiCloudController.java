@@ -7,6 +7,7 @@ import ndhu.tw.MaasService.model.request.CommentRequestModel;
 import ndhu.tw.MaasService.service.MaasService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @Tag(name = "共用API")
 @Controller
@@ -19,7 +20,7 @@ public class ApiCloudController {
     @Operation(summary = "3.3 到達目的地")
     @PostMapping(value = "/arrived", produces = "application/json")
     public @ResponseBody
-    BaseModel ApiCloud(@RequestBody ArrivedRequestModel request) {
+    BaseModel ApiCloud(@RequestBody(description = "ArrivedRequestModel")  ArrivedRequestModel request) {
         return maasService.ApiCloud(request);
     }
 

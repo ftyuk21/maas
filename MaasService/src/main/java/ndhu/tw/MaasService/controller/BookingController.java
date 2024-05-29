@@ -8,6 +8,7 @@ import ndhu.tw.MaasService.model.BaseModel;
 import ndhu.tw.MaasService.service.MaasService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @Tag(name = "乘車者")
 @Controller
