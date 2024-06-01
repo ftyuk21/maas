@@ -53,6 +53,7 @@ import { LangComponent } from './lang/lang.component';
 
 import { MessageComponent } from './message/message.component';
 import { CustomDatePipe } from './pipe/date.pipe'
+import { WebSocketService } from './service/web-socket.service'
 
 @NgModule({
   imports: [
