@@ -6,7 +6,6 @@ import java.util.Date;
 
 @Data
 public class BookingRequestModel {
-    private String phoneNumber;
     private String startLocation;
     private String destination;
     private Date pickupTime;

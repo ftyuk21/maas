@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class ArrivedRequestModel {
-        @Schema(description = "使用者ID")
-        private Long userId;
+//        @Schema(description = "使用者ID")
+//        private Long userId;
 
         @Schema(description = "訂單ID")
         private Long orderId;
