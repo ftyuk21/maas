@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class GetBookingRequestModel {
-    @Schema(description = "司機Id")
-    private Long driverID;
+    @Schema(description = "使用者Id")
+    private Long userId;
 
     @Schema(description = "訂單Id")
-    private Long orderID;
+    private Long orderId;
 }

@@ -28,7 +28,7 @@ public class UserInfoController {
     @GetMapping(value = "/getUserInfo", produces = "application/json")
     @SecurityRequirement(name = "Bearer")
     public @ResponseBody
-    BaseModel CheckOrder() {
+    BaseModel getUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserInfo currentUser = (UserInfo) authentication.getPrincipal();
         BaseModel res = new BaseModel();

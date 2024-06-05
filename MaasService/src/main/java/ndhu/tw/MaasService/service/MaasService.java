@@ -1,8 +1,12 @@
 package ndhu.tw.MaasService.service;
 
+import ndhu.tw.MaasService.db.model.UserInfo;
 import ndhu.tw.MaasService.model.request.ArrivedRequestModel;
+import ndhu.tw.MaasService.model.request.BookingRequestModel;
 import ndhu.tw.MaasService.model.request.CommentRequestModel;
 import ndhu.tw.MaasService.model.request.GetBookingRequestModel;
+import ndhu.tw.MaasService.model.response.CheckCommentResponse;
+import org.hibernate.annotations.Check;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Example;
 import ndhu.tw.MaasService.db.model.Orders;
@@ -22,24 +26,34 @@ public class MaasService {
     /*
     * 1.1 乘車者下單
     * */
-    public BaseModel createBooking(Orders request) {
+    public BaseModel createBooking(BookingRequestModel request) {
+        BaseModel res = new BaseModel();
+        Orders ord = new Orders();
+
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 7; i++) {
             sb.append(random.nextInt(10));
         }
         String orderNumber = "ORD"+sb; // 假設生成一個訂單編號
-        request.setOrderCode(orderNumber);
-        request.setStatusCode(2L);
-        ordersRepository.save(request);
-//        ordersRepository.save(request);
+
+        ord.setOrderCode(orderNumber);
+        ord.setStatusCode(2L);
+
+        ord.setPickupTime(request.getPickupTime());
+        ord.setDestination(request.getDestination());
+        ord.setStartLocation(request.getStartLocation());
+        ord.setPriceRangeUp(Long.valueOf(request.getPriceRangeUp()));
+        ord.setPriceRangeDown(Long.valueOf(request.getPriceRangeDown()));
+        ord.setCustomerId(Long.valueOf(request.getUserID()));
+
+        ordersRepository.save(ord);
         Map<String, Object> order = new HashMap<>();
         order.put("orderNumber", orderNumber);
         order.put("status", "等待接單");
 
-        BaseModel response=new BaseModel();
-        response.setData(order);
-        return response;
+        res.setData(order);
+        return res;
     }
 
 
@@ -65,11 +79,11 @@ public class MaasService {
         BaseModel response=new BaseModel();
         try{
             Orders o= new Orders();
-            o.setOrderId(request.getOrderID());
+            o.setOrderId(request.getOrderId());
             Example<Orders> example=Example.of(o);
             Orders findOrder = ordersRepository.findAll(example).get(0);
             findOrder.setStatusCode(1L);
-            findOrder.setDriverId(request.getDriverID());
+            findOrder.setDriverId(request.getUserId());
             ordersRepository.save(findOrder);
             response.setData("成功");
         }catch(DataAccessException e){
@@ -83,14 +97,26 @@ public class MaasService {
     /*
     * 1.2 接送者查看訂單
     * */
-    public BaseModel CheckOrder(Long customerId) {
-        Orders o= new Orders();
-        o.setCustomerId(customerId);
-        Example<Orders> example=Example.of(o);
-        List<Orders> ordersList = ordersRepository.findAll(example);
-        BaseModel response=new BaseModel();
-        response.setData(ordersList);
-        return response;
+    public BaseModel CheckOrder(Long userId) {
+        BaseModel res = new BaseModel();
+
+        Orders customerOder = new Orders();
+        customerOder.setCustomerId(userId);
+        Example<Orders> example=Example.of(customerOder);
+        List<Orders> customerOrdersList = ordersRepository.findAll(example);
+
+        Orders driverOder = new Orders();
+        driverOder.setDriverId(userId);
+        Example<Orders> example2 = Example.of(driverOder);
+        List<Orders> driverOrdersList = ordersRepository.findAll(example2);
+
+        HashMap resData = new HashMap();
+        resData.put("customer", customerOrdersList);
+        resData.put("driver", driverOrdersList);
+
+        res.setData(resData);
+
+        return res;
     }
     /*
      * 3.3 到達目的地
@@ -131,7 +157,7 @@ public class MaasService {
             response.setData("訂單不存在");
             return response;
         }
-            Orders findOrder = findOrderOpt.get();
+        Orders findOrder = findOrderOpt.get();
         // 根據身份設置評論和星等
         if (request.getIdentity() == 1) { // 乘車者
             findOrder.setDrivercomment(request.getComment());
@@ -145,6 +171,26 @@ public class MaasService {
         }
         ordersRepository.save(findOrder);
         response.setData("成功");
+        return response;
+    }
+
+    /*
+     * 3.4 撰寫評價
+     * */
+    public BaseModel checkComment(Long userId, Long identity) {
+        BaseModel response = new BaseModel();
+        Orders o = new Orders();
+        if(identity == 1){ // 乘客
+            o.setCustomerId(userId);
+        } else if (identity == 2) { // 司機
+            o.setDriverId(userId);
+        }else {
+            response.setData("狀態異常");
+            return response;
+        }
+        Example<Orders> example = Example.of(o);
+        Orders findOrder = ordersRepository.findAll(example).get(0);
+        response.setData(findOrder);
         return response;
     }
 }

@@ -29,4 +29,11 @@ public class ApiCloudController {
     BaseModel comment(@RequestBody CommentRequestModel request) {
         return maasService.comment(request);
     }
+
+    @Operation(summary = "3.4 查看評價")
+    @GetMapping(value = "/checkComment", produces = "application/json")
+    public @ResponseBody
+    BaseModel checkComment(Long userId, Long identity) {
+        return maasService.checkComment(userId, identity);
+    }
 }

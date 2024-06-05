@@ -2,6 +2,8 @@ package ndhu.tw.MaasService.db.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,6 +11,8 @@ import java.util.Date;
 /**
  * $table.getTableComment()
  */
+@Getter
+@Setter
 @Data
 @Entity
 @Table(name = "orders")

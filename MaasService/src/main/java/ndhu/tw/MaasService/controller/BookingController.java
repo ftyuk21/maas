@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import ndhu.tw.MaasService.db.model.Orders;
 import ndhu.tw.MaasService.model.BaseModel;
+import ndhu.tw.MaasService.model.request.BookingRequestModel;
 import ndhu.tw.MaasService.service.MaasService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,17 +24,17 @@ public class BookingController {
     @Operation(summary = "1.1 乘車者下單")
     @PostMapping(value = "/bookings", produces = "application/json")
     public @ResponseBody
-    BaseModel createBooking(@RequestBody Orders request) {
+    BaseModel createBooking(@RequestBody BookingRequestModel request) {
         return maasService.createBooking(request);
     }
 
 
     @Operation(summary = "1.2 乘車者查看訂單")
-    @GetMapping(value = "/available-booking", produces = "application/json")
+    @GetMapping(value = "/checkOrder", produces = "application/json")
     public @ResponseBody
-    BaseModel CheckOrder(@Parameter(description = "乘車者ID") @RequestParam(required = false)  Long custormerID) {
+    BaseModel checkOrder(@Parameter(description = "使用者ID") @RequestParam(required = false)  Long userId) {
         // 使用 MaasService 中的方法來獲取可接單列表
-        return maasService.CheckOrder(custormerID);
+        return maasService.CheckOrder(userId);
     }
 }
 
