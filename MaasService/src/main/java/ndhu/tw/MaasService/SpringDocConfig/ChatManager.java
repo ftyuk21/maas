@@ -28,14 +28,30 @@ public class ChatManager {
     }
 
     public static void sendMessageToCustomer(String message) {
-        for (Session session : customerSessions.values()) {
-            session.getAsyncRemote().sendText(message);
+//        for (Session session : customerSessions.values()) {
+//            session.getAsyncRemote().sendText(message);
+//        }
+
+        if (message != null && !message.isEmpty()) { // 空值檢查
+            synchronized (customerSessions) { // 使用 synchronized 同步
+                for (Session session : customerSessions.values()) {
+                    if (session != null && session.isOpen()) {
+                        session.getAsyncRemote().sendText(message);
+                    }
+                }
+            }
         }
     }
 
     public static void sendMessageToDriver(String message) {
-        for (Session session : driverSessions.values()) {
-            session.getAsyncRemote().sendText(message);
+        if (message != null && !message.isEmpty()) { // 空值檢查
+            synchronized (driverSessions) { // 使用 synchronized 同步
+                for (Session session : driverSessions.values()) {
+                    if (session != null && session.isOpen()) {
+                        session.getAsyncRemote().sendText(message);
+                    }
+                }
+            }
         }
     }
 }

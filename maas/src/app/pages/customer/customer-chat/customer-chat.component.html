@@ -1,0 +1,21 @@
+
+<div id="chat-box">
+    <div>
+        <span>連線時間：{{ connectionTime }}</span>
+    </div>
+    <div class="border-t border-gray-300"></div>
+    <div id="messages" class="message-area mt-3">
+        <div *ngFor="let message of messages"
+            [ngClass]="{'right-message': isOwnMessage(message.who), 'left-message': !isOwnMessage(message.who)}">{{
+            message.msg }}</div>
+    </div>
+    <div class="flex flex-row items-center h-14" style="background-color: #DCE8FF;">
+        <input type="text" id="message-input" placeholder="請輸入文字..." [(ngModel)]="message">
+    
+        <div>
+            <button (click)="sendMessage()" mat-fab>
+                <mat-icon>send</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

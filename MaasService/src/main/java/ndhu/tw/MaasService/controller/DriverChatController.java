@@ -24,7 +24,8 @@ public class DriverChatController {
             this.session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "Bye"));;
             return;
         }
-        ChatManager.sendMessageToCustomer(message + "   時間:" + Instant.now());
+        ChatManager.sendMessageToCustomer("[driver]" + message);
+//        ChatManager.sendMessageToCustomer(message + "   時間:" + Instant.now());
 //        this.session.getAsyncRemote().sendText("["+ Instant.now().toEpochMilli() +"] " + message);
     }
 
@@ -41,14 +42,31 @@ public class DriverChatController {
     // 連線關閉
     @OnClose
     public void onClose(CloseReason closeReason){
-        this.session.getAsyncRemote().sendText("連線中斷，中斷時間:"+ Instant.now());
-        LogUtility.info(getClass(),String.format("[websocket] 連線斷開：id={%s}，reason={%s}", this.session.getId(),closeReason));
+//        this.session.getAsyncRemote().sendText("連線中斷，中斷時間:"+ Instant.now());
+//        LogUtility.info(getClass(),String.format("[websocket] 連線斷開：id={%s}，reason={%s}", this.session.getId(),closeReason));
+
+        if (session != null && session.isOpen()) {
+            try {
+//                session.getAsyncRemote().sendText("連線中斷，中斷時間:" + Instant.now());
+                LogUtility.error(getClass(), "連線中斷，中斷時間:" + Instant.now());
+            } catch (Exception e) {
+                // 發送訊息時發生了異常
+                LogUtility.error(getClass(), "Error occurred while sending close message." + e);
+            } finally {
+                try {
+                    session.close(); // 在 finally 块中關閉會話
+                } catch (IOException e) {
+                    LogUtility.error(getClass(), "Error occurred while closing session." + e);
+                }
+            }
+        }
+        LogUtility.info(getClass(), String.format("[websocket] 連線斷開：id={%s}，reason={%s}", session.getId(), closeReason));
     }
 
     // 連線異常
     @OnError
     public void onError(Throwable throwable) throws IOException {
-        this.session.getAsyncRemote().sendText("連線異常，中斷時間:"+ Instant.now());
+//        this.session.getAsyncRemote().sendText("連線異常，中斷時間:"+ Instant.now());
         LogUtility.info(getClass(),String.format("[websocket] 連線異常：id={%s}，throwable={%s}", this.session.getId(),throwable.getMessage()));
 
         // 關閉連線。狀態碼: UNEXPECTED_CONDITION（異常）
