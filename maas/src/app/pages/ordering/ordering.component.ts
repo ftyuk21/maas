@@ -117,8 +117,8 @@ export class OrderingComponent implements OnInit {
     if (this.orderForm.valid) {
       this.http.post<any>("passenger/bookings", this.orderForm.getRawValue()).subscribe(data => {
         this.msg.showSuccess("下單成功，將為您配對合適的司機！", "")
-        console.log(data)
-        this.router.navigate(['/waiting']); // 导航到其他页面
+        // this.router.navigate(['/waiting']); 
+        this.router.navigate(['/']); 
       })
     } else {
       this.msg.showError("資料填寫不完整", "")

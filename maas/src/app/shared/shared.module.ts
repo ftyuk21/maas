@@ -52,6 +52,8 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { LangComponent } from './lang/lang.component';
 
 import { MessageComponent } from './message/message.component';
+import { CustomDatePipe } from './pipe/date.pipe'
+import { WebSocketService } from './service/web-socket.service'
 
 @NgModule({
   imports: [
@@ -95,7 +97,7 @@ import { MessageComponent } from './message/message.component';
     MatStepperModule,
     NgScrollbarModule,
     PipesModule,
-    GoogleMapsModule
+    GoogleMapsModule,
   ],
   exports: [
     RouterModule,
@@ -147,7 +149,8 @@ import { MessageComponent } from './message/message.component';
     CategoryListComponent,
     ConfirmDialogComponent,
     LangComponent,
-    GoogleMapsModule
+    GoogleMapsModule,
+    CustomDatePipe
   ],
   declarations: [
     RatingComponent,
@@ -160,7 +163,8 @@ import { MessageComponent } from './message/message.component';
     CategoryListComponent,
     ConfirmDialogComponent,
     LangComponent,
-    MessageComponent
+    MessageComponent,
+    CustomDatePipe
   ], 
   // providers:[
   //   { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG }
