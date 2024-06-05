@@ -33,6 +33,9 @@ import { AppInterceptor } from './theme/utils/app-interceptor';
 import { OptionsComponent } from './theme/components/options/options.component';
 import { FooterComponent } from './theme/components/footer/footer.component';
 import { UrlInterceptor } from './shared/interceptors/url-interceptor';
+import { AuthService } from './shared/service/auth.service';
+import { AuthInterceptor } from './shared/service/auth.interceptor';
+import { AuthGuard } from './shared/service/auth.guard';
 
 
 @NgModule({
@@ -64,12 +67,14 @@ import { UrlInterceptor } from './shared/interceptors/url-interceptor';
     FooterComponent
   ],
   providers: [
+    AuthService,
     AppSettings,
     AppService,
+    AuthGuard,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },
-    // { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

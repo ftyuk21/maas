@@ -1,0 +1,77 @@
+.chat-box {
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.message-area {
+    height: 200px;
+    overflow-y: auto;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.message-text {
+    word-wrap: break-word;
+}
+
+input[type="text"] {
+    width: calc(100% - 15%);
+    height: 50%;
+    padding: 5px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+:host ::ng-deep button {
+    padding: 4px 7px !important;
+    font-size: 12px;
+    padding: 5px 10px;
+    background-color: #4399FF;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+:host ::ng-deep .mdc-fab {
+    width: 35px;
+    height: 35px;
+}
+
+.message-area {
+    height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    /* 列方向反向排列 */
+}
+
+.right-message {
+    text-align: left;
+    background-color: #0CBBC7E5;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 5px;
+    align-self: flex-end;
+    max-width: 40%;
+    word-wrap: break-word;
+}
+
+.left-message {
+    text-align: left;
+    background-color: #0CBBC72E;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 5px;
+
+    align-self: flex-start;
+    max-width: 40%;
+    word-wrap: break-word;
+}
