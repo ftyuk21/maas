@@ -6,6 +6,7 @@ import ndhu.tw.MaasService.model.request.BookingRequestModel;
 import ndhu.tw.MaasService.model.request.CommentRequestModel;
 import ndhu.tw.MaasService.model.request.GetBookingRequestModel;
 import ndhu.tw.MaasService.model.response.CheckCommentResponse;
+import org.aspectj.weaver.ast.Or;
 import org.hibernate.annotations.Check;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Example;
@@ -118,6 +119,23 @@ public class MaasService {
 
         return res;
     }
+
+    /*
+     * 1.2 接送者查看訂單
+     * */
+    public BaseModel getOrder(Long id) {
+        BaseModel res = new BaseModel();
+
+        Orders o  = new Orders();
+        o.setOrderId(id);
+        Example<Orders> example = Example.of(o);
+        Orders resData = ordersRepository.findAll(example).get(0);
+
+        res.setData(resData);
+
+        return res;
+    }
+
     /*
      * 3.3 到達目的地
      * */

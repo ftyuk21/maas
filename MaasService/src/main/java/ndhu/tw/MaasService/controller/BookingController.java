@@ -36,5 +36,14 @@ public class BookingController {
         // 使用 MaasService 中的方法來獲取可接單列表
         return maasService.CheckOrder(userId);
     }
+
+
+    @Operation(summary = "1.3 查看訂單詳情 - 單筆")
+    @GetMapping(value = "/getOrder", produces = "application/json")
+    public @ResponseBody
+    BaseModel getOrder(@Parameter(description = "訂單ID") @RequestParam(required = false)  Long orderId) {
+        // 使用 MaasService 中的方法來獲取可接單列表
+        return maasService.getOrder(orderId);
+    }
 }
 

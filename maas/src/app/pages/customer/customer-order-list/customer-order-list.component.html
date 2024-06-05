@@ -1,0 +1,76 @@
+<div *ngIf="orderList$ | async as ordersList">
+    <mat-tab-group>
+        <!-- 123456 -->
+        <mat-tab label="已完成">
+            <ng-container *ngFor="let order of ordersList" class="pb-4 h-auto flex flex-col">
+        
+                <div *ngIf="order.statusCode == 99" class="pt-2 flex flex-col">
+                    <div class="orderTitle flex flex-row">
+                        <p class="justify-self-start self-center text-[#858484]">{{ order.pickupTime }}</p>
+                        <p class="justify-self-start self-center">訂單編號: {{ order.orderCode}}</p>
+                    </div>
+                    <div class="my-3 grid grid-cols-3 gap-1">
+                        <div class="col-span-2 flex flex-col">
+                            <p>訂單號碼：{{ order.orderCode }}</p>
+                            <p>起始地點:{{ order.startLocation }}</p>
+                            <p>目的地：{{ order.destination }}</p>
+                        </div>
+                        <div class="col-span-1 place-self-end">
+                            <button mat-raised-button color="primary" type="submit" (click)="nextToDetail(order.orderId)">
+                                查看訂單詳情
+                              </button>
+                        </div>
+                    </div>
+                    <hr class="text-black">
+                </div>
+            </ng-container>
+        </mat-tab>
+        <mat-tab label="等待司機接單">
+            <ng-container *ngFor="let order of ordersList" class="pb-4 h-auto flex flex-col">
+                <div *ngIf="order.statusCode == 2" class="pt-2 flex flex-col">
+                    <div class="orderTitle flex flex-row">
+                        <p class="justify-self-start self-center text-[#858484]">{{ order.pickupTime }}</p>
+                        <p class="justify-self-start self-center">訂單編號: {{ order.orderCode}}</p>
+                    </div>
+                    <div class="my-3 grid grid-cols-3 gap-1">
+                        <div class="col-span-2 flex flex-col">
+                            <p>訂單號碼：{{ order.orderCode }}</p>
+                            <p>起始地點:{{ order.startLocation }}</p>
+                            <p>目的地：{{ order.destination }}</p>
+                        </div>
+                        <div class="col-span-1 place-self-end">
+                            <button mat-raised-button color="primary" type="submit" (click)="nextToDetail(order.orderId)">
+                                查看訂單詳情
+                              </button>
+                        </div>
+                    </div>
+                    <hr class="text-black">
+                </div>
+
+            </ng-container>
+        </mat-tab>
+        <mat-tab label="訂單已媒合">
+            <ng-container *ngFor="let order of ordersList">
+                <div *ngIf="order.statusCode == 1">
+                    <div class="orderTitle flex flex-row">
+                        <p class="justify-self-start self-center text-[#858484]">{{ order.pickupTime }}</p>
+                        <p class="justify-self-start self-center">訂單編號: {{ order.orderCode}}</p>
+                    </div>
+                    <div class="my-3 grid grid-cols-3 gap-1">
+                        <div class="col-span-2 flex flex-col">
+                            <p>訂單號碼：{{ order.orderCode }}</p>
+                            <p>起始地點:{{ order.startLocation }}</p>
+                            <p>目的地：{{ order.destination }}</p>
+                        </div>
+                        <div class="col-span-1 place-self-end">
+                            <button mat-raised-button color="primary" type="submit" (click)="nextToDetail(order.orderId)">
+                                查看訂單詳情
+                              </button>
+                        </div>
+                    </div>
+                    <hr class="text-black">
+                </div>
+            </ng-container>
+        </mat-tab>
+      </mat-tab-group>
+</div>

@@ -7,6 +7,7 @@ import {
 } from "@angular/forms";
 import { GoogleMap } from "@angular/google-maps";
 import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "src/app/shared/service/auth.service";
 import { GoogleService } from "src/app/shared/service/google.service";
 import { NotificationService } from "src/app/shared/service/notification.service";
 
@@ -48,7 +49,7 @@ export class OrderingComponent implements OnInit {
 
   constructor(public fb: UntypedFormBuilder, private route: ActivatedRoute, private router: Router,
     public http: HttpClient, public map: GoogleService,
-    public msg: NotificationService, private cdr: ChangeDetectorRef) { }
+    public msg: NotificationService, private cdr: ChangeDetectorRef, public auth: AuthService) { }
 
   ngOnInit() {
     // 取得資料
@@ -56,10 +57,12 @@ export class OrderingComponent implements OnInit {
 
     this.getUserInfo();
     this.initForm();
-    this.orderForm.patchValue({
-      userID: this.userInfo.id,
-      phoneNumber: this.userInfo.phone,
-    });
+
+    this.auth.userInfo$.subscribe(info => {
+      this.orderForm.patchValue({
+        userID: info.data.userId
+      });
+    })
 
     this.map.getLocation()
       .then(coords => {
@@ -89,7 +92,7 @@ export class OrderingComponent implements OnInit {
   initForm() {
     this.orderForm = this.fb.group({
       userID: [0, Validators.compose([Validators.required])],
-      phoneNumber: [null, Validators.compose([Validators.required])],
+      // phoneNumber: [null, Validators.compose([Validators.required])],
       startLocation: [null, Validators.compose([Validators.required])],
       destination: [null, Validators.compose([Validators.required])],
       pickupTime: [null, Validators.compose([Validators.required])],
@@ -113,6 +116,12 @@ export class OrderingComponent implements OnInit {
   }
 
   sendOrder() {
+    
+    if(this.orderForm.get('priceRangeDown').value > this.orderForm.get('priceRangeUp').value){
+      console.log(this.orderForm.get('priceRangeDown').value )
+      this.msg.showError("價格上限不可低於價格下限", "")
+      return;
+    }
     this.markAllAsTouchedAndDirty();
     if (this.orderForm.valid) {
       this.http.post<any>("passenger/bookings", this.orderForm.getRawValue()).subscribe(data => {

@@ -51,10 +51,12 @@ export class MenuComponent implements OnInit {
     console.log(type)
     if(type == 11){
       // 歷史訂單
+      this.router.navigate(['/customer/customer-order-list']);
     }else if(type == 12){
       this.router.navigate(['/ordering']);
     }else if(type == 21){
       // 歷史訂單 司機
+      this.router.navigate(['/driver/driver-order-list']);
     }else if(type == 22){
       this.router.navigate(['/pickup']);
     }

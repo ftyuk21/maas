@@ -1,0 +1,16 @@
+.orderTitle {
+	background-color: #dededf;
+
+	p {
+		font-size: 15px;
+		padding: 1%;
+	}
+
+	.unpaid {
+		color: #ef5533;
+		background-color: #f6e1e1;
+		border-radius: 10%;
+		padding: 3px;
+		font-size: inherit; /* 继承父级元素的字体大小 */
+	}
+}

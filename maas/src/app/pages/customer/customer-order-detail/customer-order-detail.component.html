@@ -1,0 +1,54 @@
+<mat-card class="h-lvh" *ngIf="order$ | async as order">
+    <mat-card-content>
+        <div class="grid grid-cols-6 gap-4">
+            <div class="col-span-4" style="height: 500px;">
+                <google-map #googleMap [center]="center" [zoom]="zoom" height="100%" width="100%">
+                    <map-marker *ngFor="let marker of markers.position; let i = index" [position]="marker"
+                        [title]="markers.options[i].title" [label]="markers.options[i].label"></map-marker>
+                </google-map>
+            </div>
+
+            <div class="col-span-2 flex flex-col">
+                
+                <div class="">
+                    <mat-card>
+                        <mat-card-content>
+                            <div class="flex flex-col gap-4">
+
+                                <div class="orderTitle flex flex-row gap-3">
+                                    <p class="justify-self-start self-center">訂單資料</p>
+                                    <p class="justify-self-start self-center">訂單編號: {{ order.orderCode}}</p>
+                                </div>
+
+                                <div class="flex flex-row gap-2">
+                                    <mat-icon>pin-drop</mat-icon>
+                                    <span class="self-center">起始:</span>
+                                    <span class="self-center">{{ order.startLocation }}</span>
+                                </div>
+
+                                <div class="flex flex-row gap-2">
+                                    <mat-icon>pin-drop</mat-icon>
+                                    <span class="self-center">目的:</span>
+                                    <span class="self-center">{{ order.destination }}</span>
+                                </div>
+
+                                <div class="flex flex-row gap-2">
+                                    <mat-icon>alarm</mat-icon>
+                                    <span class="self-center">時間:</span>
+                                    <span class="self-center">{{ order.pickupTime }}</span>
+                                </div>
+
+                                <div class="flex flex-row gap-2">
+                                    <mat-icon>paid</mat-icon>
+                                    <span class="self-center">金額:</span>
+                                    <span class="self-center">{{ order.priceRangeDown }} ～ {{ order.priceRangeUp }}</span>
+                                </div>
+
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
