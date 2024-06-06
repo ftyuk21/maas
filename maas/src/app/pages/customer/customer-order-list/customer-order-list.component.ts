@@ -4,6 +4,8 @@ import { BehaviorSubject } from 'rxjs';
 import { AuthService } from '../../../shared/service/auth.service'
 import { NotificationService } from 'src/app/shared/service/notification.service';
 import { HttpClient } from '@angular/common/http';
+import { ShowGoogleMapComponent } from '../../show-google-map/show-google-map.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-customer-order-list',
@@ -18,7 +20,7 @@ export class CustomerOrderListComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
   private router: Router,public msg: NotificationService,
-  public authService: AuthService, public http: HttpClient) { }
+    public authService: AuthService, public http: HttpClient, public dialog: MatDialog) { }
   // 自己加入 implements OnInit
   ngOnInit(): void {
     this.authService.userInfo$.subscribe(info => {
@@ -30,6 +32,7 @@ export class CustomerOrderListComponent implements OnInit {
 
   getOrderList(userId: number){
     this.http.get<any>("passenger/checkOrder",{params: {userId}}).subscribe(data => {
+      console.log(data)
       if(data.data.customer.length > 0 ){
         this.orderList$.next(data.data.customer);
         console.log(data.data.customer)
@@ -39,8 +42,21 @@ export class CustomerOrderListComponent implements OnInit {
     })
   }
 
-  nextToDetail(orderId: number){
-    this.router.navigate(['customer/customer-order-detail',orderId]);
+  openDialog(start: string, end: string): void {
+    const dialogRef = this.dialog.open(ShowGoogleMapComponent, {
+      width: '70%',
+      height: '70%',
+      data: { start: start, end: end },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      // this.animal = result;
+    });
+  }
+
+  goToOrderIng(orderId: number){
+    this.router.navigate(['customer/customer-ing', orderId]);
   }
 
 

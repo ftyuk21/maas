@@ -36,6 +36,7 @@ import { UrlInterceptor } from './shared/interceptors/url-interceptor';
 import { AuthService } from './shared/service/auth.service';
 import { AuthInterceptor } from './shared/service/auth.interceptor';
 import { AuthGuard } from './shared/service/auth.guard';
+import { ShowGoogleMapComponent } from './pages/show-google-map/show-google-map.component'
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import { AuthGuard } from './shared/service/auth.guard';
     SidenavMenuComponent,
     BreadcrumbComponent,
     OptionsComponent,
-    FooterComponent
+    FooterComponent,
+    ShowGoogleMapComponent
   ],
   providers: [
     AuthService,

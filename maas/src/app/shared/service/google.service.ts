@@ -42,6 +42,16 @@ export class GoogleService {
   }
 
   /**
+   * 地址賺換為經緯度2
+   * @param address 
+   * @returns 
+   */
+  getCoordinates2(address: string) {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${this.apiKey}`;
+    return this.http.get(url).toPromise();
+  }
+
+  /**
    * 經緯度轉為地址
    * @param latitude 
    * @param longitude 

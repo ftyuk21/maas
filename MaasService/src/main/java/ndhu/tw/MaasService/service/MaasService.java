@@ -206,8 +206,9 @@ public class MaasService {
             response.setData("狀態異常");
             return response;
         }
+        o.setStatusCode(99L);
         Example<Orders> example = Example.of(o);
-        Orders findOrder = ordersRepository.findAll(example).get(0);
+        List<Orders> findOrder = ordersRepository.findAll(example);
         response.setData(findOrder);
         return response;
     }

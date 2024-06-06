@@ -1,10 +1,10 @@
 <mat-card>
   <mat-card-content>
     <div class="w-full h-full">
-      <div class="text-center">
-        <h1>訂單列表</h1>
+      <div class="text-center mb-3">
+        <h1 class="text-2xl font-semibold">訂單列表</h1>
       </div>
-      <div class="grid grid-cols-4 gap-4 overflow-auto" *ngIf="pickUpList$ | async as pickUpList">
+      <div class="grid grid-cols-4 gap-4 overflow-auto h-96" *ngIf="pickUpList$ | async as pickUpList">
         <div class="w-full cursor-pointer littleCard" *ngFor="let pickUp of pickUpList" >
           <mat-card>
             <div (click)="goToPickupDetail(pickUp.orderId,pickUp)">

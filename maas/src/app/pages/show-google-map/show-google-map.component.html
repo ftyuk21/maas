@@ -1,0 +1,17 @@
+<!-- <h2 mat-dialog-title>地圖 </h2> -->
+<mat-dialog-content class="h-full w-full">
+    <!-- <div class="h-full w-full"> -->
+    <!-- <google-map #googleMap [center]="center" [zoom]="zoom" height="100%" width="100%">
+            <map-marker *ngFor="let marker of markers.position; let i = index" [position]="marker"
+                [title]="marke1rs.options[i].title" [label]="markers.options[i].label"></map-marker>
+        </google-map> -->
+
+    <div id="map" style="height: 100%; width:100%;"></div>
+    <!-- </div> -->
+</mat-dialog-content>
+<mat-dialog-actions >
+    <div class="w-full flex justify-end">
+
+        <button mat-button (click)="onNoClick()">close</button>
+    </div>
+</mat-dialog-actions>

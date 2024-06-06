@@ -1,12 +1,9 @@
-<div class="grid grid-cols-3 gap-8">
+<div class="grid grid-cols-3 gap-8" *ngIf="pickUpDetail$ | async as pickUpDetail">
     <div class="col-span-2">
-        <google-map #googleMap [center]="center" [zoom]="zoom" height="100%" width="100%">
-            <map-marker *ngFor="let marker of markers.position; let i = index" [position]="marker"
-                [title]="markers.options[i].title" [label]="markers.options[i].label"></map-marker>
-        </google-map>
+        <div id="map" style="height: 100%; width:100%;"></div>
     </div>
 
-    <div class="h-full col-span-1">
+    <div class="h-full col-span-1" *ngIf="pickUpDetail$ | async as order">
         <mat-card>
             <mat-card-content>
                 <div class="flex flex-col">
@@ -22,7 +19,7 @@
                     <div class="flex flex-row my-2">
                         <h4 class="font-semibold">訂單號碼：</h4>
                         <p>{{order.orderCode}}</p>
-                        <p class="ml-5">{{order.time}}</p>
+                        <p class="ml-5">{{order.pickupTime | date:'yyyy-MM-dd HH:mm:ss'}}</p>
                     </div>
                     <div class="my-2 flex flex-row gap-2">
                         <div class="w-1/5">
@@ -39,18 +36,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-row my-2">
-                        <p>{{order.startPlace}}</p>
-                        <p class="xy-5 font-semibold">～</p>
-                        <p>{{order.endPlace}}</p>
+                    <div class="flex flex-col my-2 text-center">
+                        <p>{{order.startLocation}}</p>
+                        <p class="xy-5 my-2 font-semibold">至</p>
+                        <p>{{order.destination}}</p>
                     </div>
                     <div class="flex flex-col my-2">
                         <h4 class="font-semibold h-1/2 pl-2 mb-1">評論</h4>
-                        <div class="rounded-lg overflow-auto h-40" style="background-color: #cecece;">
-                            <div *ngFor="let com of comment" class="flex flex-row w-full">
-                                <p class="w-1/4 pl-5 font-semibold">{{com.passengerName}}</p>
-                                <p class="w-3/4">{{com.comment}}</p>
-                                <p class="w-1/4 pl-5 text-center">{{com.rating}}</p>
+                        <div class="rounded-lg overflow-auto h-40 p-2" style="background-color: #cecece;">
+                            <div *ngFor="let com of comment" class="flex flex-row w-full mb-2">
+                                <!-- <p class="w-1/4 pl-5 font-semibold">{{com.passengerName}}</p> -->
+                                <p *ngIf="com != ''" class="">{{com}}</p>
+                                <!-- <p class="w-1/4 pl-5 text-center">{{com.rating}}</p> -->
                             </div>
                         </div>
                     </div>
@@ -61,7 +58,7 @@
                         <button class="accept"> 接受 </button>
                     </div> -->
                     <div class="my-2 flex flex-row justify-center gap-4">
-                        <a class="cursor-pointer goBack">返回</a>
+                        <a class="cursor-pointer goBack" (click)="goBack()">返回</a>
                         <a class="cursor-pointer accept" (click)="accept()">接受</a>
                     </div>
 

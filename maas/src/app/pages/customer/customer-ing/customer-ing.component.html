@@ -1,66 +1,61 @@
-<mat-card class="h-lvh">
-    <mat-card-content>
-        <div class="grid grid-cols-6 gap-4">
-            <div class="col-span-3" style="background-color: black;">
-                123
-                <!-- <google-map #googleMap [center]="center" [zoom]="zoom" height="100%" width="100%">
-                    <map-marker *ngFor="let marker of markers.position; let i = index" [position]="marker"
-                        [title]="markers.options[i].title" [label]="markers.options[i].label"></map-marker>
-                </google-map> -->
-            </div>
-            <div class="col-span-2">
-                <app-customer-chat></app-customer-chat>
-            </div>
-            <div class="col-span-1 flex flex-col">
-                <div>
-                    <mat-icon>person</mat-icon>
+<div>
+    <mat-card>
+        <mat-card-content>
+            <div class="grid grid-cols-7 gap-4">
+                <div class="col-span-3">
+                    <div id="map" style="height: 100%; width:100%;"></div>
                 </div>
-                <div class="flex flex-row justify-between">
-                    <div class="flex flex-row">
-                        <mat-icon>person-pin-circle</mat-icon>
-                        <span>王小明</span>
+                <div class="col-span-2">
+                    <app-customer-chat></app-customer-chat>
+                </div>
+                <div class="col-span-2 flex flex-col">
+                    <div class="">
+                        <mat-card>
+                            <mat-card-content>
+                                <div class="flex flex-col gap-4" *ngIf="order$ | async as order">
+
+                                    <div class="orderTitle flex flex-row gap-3">
+                                        <p class="justify-self-start self-center">訂單資料</p>
+                                        <p class="justify-self-start self-center">訂單編號: {{ order.orderCode}}</p>
+                                    </div>
+
+                                    <div class="flex flex-row gap-2">
+                                        <mat-icon>pin-drop</mat-icon>
+                                        <span class="self-center">起始:</span>
+                                        <span class="self-center">{{ order.startLocation }}</span>
+                                    </div>
+
+                                    <div class="flex flex-row gap-2">
+                                        <mat-icon>pin-drop</mat-icon>
+                                        <span class="self-center">目的:</span>
+                                        <span class="self-center">{{ order.destination }}</span>
+                                    </div>
+
+                                    <div class="flex flex-row gap-2">
+                                        <mat-icon>alarm</mat-icon>
+                                        <span class="self-center">時間:</span>
+                                        <span class="self-center">{{ order.pickupTime }}</span>
+                                    </div>
+
+                                    <div class="flex flex-row gap-2">
+                                        <mat-icon>paid</mat-icon>
+                                        <span class="self-center">金額:</span>
+                                        <span class="self-center">{{ order.priceRangeDown }} ～ {{ order.priceRangeUp
+                                            }}</span>
+                                    </div>
+
+                                    <div class="flex flex-row gap-2">
+                                        <button mat-raised-button color="primary" type="submit" (click)="goToOrderIng(order.orderId)">
+                                            
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
                     </div>
-
-                    <div class="flex flex-row">
-                        <mat-icon>call</mat-icon>
-                        <span>09999999</span>
-                    </div>
-                </div>
-                <div class="">
-                    <mat-card>
-                        <mat-card-content>
-                            <div class="flex flex-col">
-
-                                <div>
-                                    <mat-icon>list-alt</mat-icon>
-                                    <span>訂單資料</span>
-                                </div>
-
-                                <div>
-                                    <mat-icon>directions-car</mat-icon>
-                                    <span>車牌:</span>
-                                </div>
-
-                                <div>
-                                    <mat-icon>pin-drop</mat-icon>
-                                    <span>地點:</span>
-                                </div>
-
-                                <div>
-                                    <mat-icon>alarm</mat-icon>
-                                    <span>時間:</span>
-                                </div>
-
-                                <div>
-                                    <mat-icon>paid</mat-icon>
-                                    <span>金額:</span>
-                                </div>
-
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
                 </div>
             </div>
-        </div>
-    </mat-card-content>
-</mat-card>
+        </mat-card-content>
+    </mat-card>
+</div>

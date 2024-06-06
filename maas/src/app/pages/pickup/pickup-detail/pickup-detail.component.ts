@@ -7,6 +7,7 @@ import { GoogleService } from 'src/app/shared/service/google.service';
 import { NotificationService } from 'src/app/shared/service/notification.service';
 import { GoogleMap } from "@angular/google-maps";
 import { BehaviorSubject } from 'rxjs';
+import { AuthService } from 'src/app/shared/service/auth.service';
 
 function convertToLatLngLiteral(position: { lat: number, lng: number }): google.maps.LatLngLiteral {
   return { lat: position.lat, lng: position.lng };
@@ -25,39 +26,24 @@ export class Options {
 })
 export class PickupDetailComponent implements OnInit {
   @ViewChild('googleMap') googleMap: GoogleMap;
-  id: any;
-  comment: {}[];
+  id: any; // orderId
+  customerId: number // 被查詢者Id
+  comment: string[] = [];
+  userId: number;
 
+  map: google.maps.Map;
   directionsService: google.maps.DirectionsService;
   directionsRenderer: google.maps.DirectionsRenderer;
+
+
+
+  routePoints: google.maps.LatLngLiteral[];
 
   progressBarCount;
 
   pickUpDetail= {}; // 訂單詳細資料
 
-  order = {
-    orderId: 5,
-    orderCode: "3578465",
-    passengerRatingCount: 13,
-    passengerRatingValue: 55,
-    comment: [
-      { passengerId: 3, passengerName: "CCC", rating: 4.5, comment: "乘客有禮貌" },
-      { passengerId: 2, passengerName: "BBB", rating: 5, comment: "給小費" },
-      { passengerId: 1, passengerName: "AAA", rating: 5, comment: "有小費" },
-      { passengerId: 4, passengerName: "DDD", rating: 2, comment: "態度很差" },
-      { passengerId: 4, passengerName: "DDD", rating: 2.5, comment: "態度很差" },
-      { passengerId: 4, passengerName: "DDD", rating: 2, comment: "態度很差" },
-      { passengerId: 4, passengerName: "DDD", rating: 2, comment: "態度很差" },
-      { passengerId: 4, passengerName: "DDD", rating: 2, comment: "態度很差" },
-      { passengerId: 4, passengerName: "DDD", rating: 3.4, comment: "態度很差" },
-      { passengerId: 4, passengerName: "DDD", rating: 5, comment: "態度很差" },
-      { passengerId: 4, passengerName: "DDD", rating: 1.7, comment: "態度很差" },
-      { passengerId: 4, passengerName: "DDD", rating: 5, comment: "態度很差" },
-    ],
-    time: "2024-05-14T12:30:00Z",
-    startPlace: "974花蓮縣壽豐鄉理工二館",
-    endPlace: "974花蓮縣壽豐鄉中正路1號"
-  }
+  pickUpDetail$ = new BehaviorSubject<any>("");
 
   latitude: number; // 緯度 當前位置
   longitude: number; // 經度 當前位置
@@ -66,158 +52,193 @@ export class PickupDetailComponent implements OnInit {
   ratingsCount: any; // 評分人數
   ratingsValue: any; // 總分
 
-  center: google.maps.LatLngLiteral; // 地圖中心點
-  zoom = 15; // 縮放
-
-  markers: {
-    options: Options[];
-    position: google.maps.LatLngLiteral[];
-  } = { options: [], position: [] };
-
-  test = "測試"
 
   constructor(private route: ActivatedRoute,
-    public http: HttpClient, public dialog: MatDialog, public map: GoogleService,
-    public msg: NotificationService, private cdr: ChangeDetectorRef) {
-    this.directionsService = new google.maps.DirectionsService();
-    this.directionsRenderer = new google.maps.DirectionsRenderer({
-      polylineOptions: {
-        strokeColor: '#2828FF', // 
-        strokeOpacity: 1.0, // 不透明度
-        strokeWeight: 3 // 寬度
-      }
-    });
+    public http: HttpClient, public dialog: MatDialog, public google: GoogleService, private router: Router,
+    public msg: NotificationService, private cdr: ChangeDetectorRef,private authService: AuthService) {
   }
 
 
   ngOnInit(): void {
+    this.authService.userInfo$.subscribe(i => {
+      if(i){
+        this.userId = i.data.userId
+      }
+    })
     this.route.params.subscribe(params => {
-      this.getLocalStorage()
       this.id = params['id'];
-      this.comment = this.order.comment;
-      this.ratingsCount = this.order.comment.length;
-      this.ratingsValue = this.order.comment.reduce((total, comment) => total + comment.rating, 0);
-      this.progressBarCount = Array.from({ length: 5 }, (_, i) => {
-        const rating = 5 - i; // 從 5 開始遞減
-        const count = this.order.comment.filter(comment => Math.floor(comment.rating) === rating).length;
-        return count;
-      });
-
-      // this.getAndSetCoordinates(this.order.startPlace, "起始", "起始位置");
-      // this.getAndSetCoordinates(this.order.endPlace, "目的", "目的地");
-
-      // this.mapReady(this.order.startPlace, this.order.endPlace)
-
+      this.getPickUpDetail(this.id);
     });
-
-    this.map.getLocation()
-      .then(coords => {
-        this.center = { lat: coords.latitude, lng: coords.longitude }
-        const o = {
-          position: { lat: coords.latitude, lng: coords.longitude },
-          label: {
-            color: "black", text: "當前", fontSize: '15px', fontWeight: 'bold',
-          },
-          title: "當前位置",
-          options: { draggable: false },
-        }
-        this.setGooglePostion(o)
-      })
-      .catch(error => {
-        this.msg.showError("取得當前位置錯誤，請聯繫技術人員！", "錯誤")
-        console.error(error);
-      });
-
   }
 
-  ngAfterViewInit() {
-    this.mapReady(this.order.startPlace, this.order.endPlace);
-  }
-
-  setGooglePostion(postion: Options) {
-    this.markers.options.push(postion as Options)
-    this.markers.position.push(postion.position)
-    // console.log(this.markers)
-    this.reloadMap()
-  }
-
-  // 重新加载地图
-  reloadMap() {
-    if (this.googleMap) {
-      // 调用 ChangeDetectorRef 的 detectChanges 方法手动触发变化检测
-      this.cdr.detectChanges();
-    }
-  }
 
   accept() {
-    this.http.get<any>("test/hello").subscribe(data => {
-      console.log(data)
-      const dialogRef = this.dialog.open(WaitDialogComponent, {
-        width: '250px', // 設置寬度
-        height: '250px', // 設置高度
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
-      });
+    this.http.post<any>("driver/getBooking", { userId:this.userId, orderId:this.id }).subscribe(data => {
+      this.goBack();
     })
   }
 
-  getAndSetCoordinates(place: string, label: string, title: string) {
-    this.map.getCoordinates(place).subscribe(data => {
-      if (data.status == "OK") {
-        const o = {
-          position: data.results[0].geometry.location,
-          label: {
-            color: "black", text: label, fontSize: '15px', fontWeight: 'bold',
-          },
-          title: title,
-          options: { draggable: false },
-        };
-        this.setGooglePostion(o);
+  getPickUpDetail(orderId: number){
+    this.http.get<any>("passenger/getOrder",{params:{orderId}}).subscribe(async data => {
+      if (data.code == "0000") {
+        this.pickUpDetail$.next(data.data)
+        this.customerId = data.data.customerId;
+        const startResult = await this.google.getCoordinates2(data.data.startLocation);
+        const endResult = await this.google.getCoordinates2(data.data.destination);
+        this.initializeMap(startResult, endResult)
+        this.getCommentList(this.customerId, 1);
       } else {
-        this.msg.showError('訂單取得不成功，請聯繫技術人員！');
+        this.msg.showError("無法取得可接訂單資料，請聯繫技術人員！")
       }
-    });
+    })
   }
 
+  getCommentList(userId, identity){
+    this.http.get<any>("Cloud/checkComment", { params: { userId, identity }}).subscribe(data => {
+      if(data.data.length > 0){
+        // this.comment = data.data.comment;
+        data.data.forEach((item:any) => {
+          // 將每個物件中的 comment 屬性加入到 this.comment 陣列中
+          this.comment.push(item.customercomment);
+        });
+        this.ratingsCount = data.data.length;
+        this.ratingsValue = data.data.reduce((acc, curr) => acc + curr.customerstar, 0);
+        
+        // 初始化一個包含五個元素的陣列，初始值為 0
+        this.progressBarCount = Array.from({ length: 5 }, () => 0);
 
+        // 遍歷 data.data 陣列中的每個物件
+        data.data.forEach((item: any) => {
+          // 取得評分，並將其轉換為數字
+          const rating = item.customerstar;
 
-  // 地圖載好後化路線
-  mapReady(startPlace, endPlace) {
-    this.directionsRenderer.setMap(this.googleMap.googleMap);
-    this.calculateAndDisplayRoute(startPlace, endPlace);
+          // 如果評分在合法範圍內（1 到 5 之間）
+          if (rating >= 1 && rating <= 5) {
+            // 增加相應評分的出現次數
+            const index = 5 - Math.floor(rating);
+            this.progressBarCount[index]++;
+          }
+        });
+        
+        // this.progressBarCount = Array.from({ length: 5 }, (_, i) => {
+        //   const rating = 5 - i; // 從 5 開始遞減
+        //   const count = data.data.customerstar.filter(comment => Math.floor(comment.rating) === rating).length;
+        //   return count;
+        // });
+      } else if (data.data.length == 0){
+        this.comment = [];
+        this.ratingsCount = 0;
+        this.ratingsValue = 5.0;
+        // 初始化一個包含五個元素的陣列，初始值為 0
+        this.progressBarCount = Array.from({ length: 5 }, () => 0);
+        this.msg.showInfo("無評價", "");
+      }else{
+        this.msg.showInfo("評價取得異常，請聯繫技術人員","");
+      }
+    })
   }
 
-  // 計算並顯示路線
-  calculateAndDisplayRoute(startPlace, endPlace) {
-    const start = startPlace; // 起
-    const end = endPlace; // 終點
-    const request = {
-      origin: start,
-      destination: end,
-      travelMode: google.maps.TravelMode.DRIVING // 設為駕駛模式
+  initializeMap(start, end) {
+    const mapOptions: google.maps.MapOptions = {
+      center: { lat: 23.897739340971725, lng: 121.54227420918299 },
+      zoom: 15
     };
-    this.directionsService.route(request, (result, status) => {
+    this.map = new google.maps.Map(document.getElementById('map') as HTMLElement, mapOptions);
+
+    // Add marker for start point
+    const startPoint = new google.maps.Marker({
+      position: { lat: start.results[0].geometry.location.lat, lng: start.results[0].geometry.location.lng }, // Replace START_LAT and START_LNG with your actual start point coordinates
+      title: 'Start Point',
+      label: 'Start' // Label for start point
+    });
+
+    // Add marker for end point
+    const endPoint = new google.maps.Marker({
+      position: { lat: end.results[0].geometry.location.lat, lng: end.results[0].geometry.location.lng }, // Replace END_LAT and END_LNG with your actual end point coordinates
+      title: 'End Point',
+      label: 'End' // Label for end point
+    });
+
+    // Add marker for current position
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const currentPosition = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        // Set current position as map center
+        this.map.setCenter(currentPosition);
+        // Add marker for current position
+        const currentPositionMarker = new google.maps.Marker({
+          position: currentPosition,
+          map: this.map,
+          title: 'Your Current Position',
+          label: 'Now' // Label for current position
+        });
+
+        this.setListener(currentPositionMarker, startPoint, endPoint)
+
+        // Draw route between start and end points
+        this.drawRoute(startPoint.getPosition(), endPoint.getPosition());
+      });
+    } else {
+      console.log('Geolocation is not supported by this browser.');
+    }
+  }
+
+  setListener(currentPositionMarker, startPoint, endPoint) {
+    // Add click event listener to current position marker
+    currentPositionMarker.addListener('click', () => {
+      // Create info window
+      const infoWindow = new google.maps.InfoWindow({
+        content: '你當前的位置'
+      });
+      // Open info window
+      infoWindow.open(this.map, currentPositionMarker);
+    });
+
+    startPoint.addListener('click', () => {
+      // Create info window
+      const infoWindow = new google.maps.InfoWindow({
+        content: '你的上車地點'
+      });
+      // Open info window
+      infoWindow.open(this.map, startPoint);
+    });
+
+    endPoint.addListener('click', () => {
+      // Create info window
+      const infoWindow = new google.maps.InfoWindow({
+        content: '你的目的地'
+      });
+      // Open info window
+      infoWindow.open(this.map, endPoint);
+    });
+  }
+
+  drawRoute(startPoint, endPoint) {
+    // Draw route between start and end points
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(this.map);
+
+    const request = {
+      origin: startPoint,
+      destination: endPoint,
+      travelMode: google.maps.TravelMode.DRIVING
+    };
+
+    directionsService.route(request, (result, status) => {
       if (status === google.maps.DirectionsStatus.OK) {
-        this.directionsRenderer.setDirections(result);
+        directionsRenderer.setDirections(result);
+      } else {
+        console.error('Error fetching directions:', status);
       }
     });
   }
 
-  getLocalStorage() {
-    const value = localStorage.getItem('pickUpDetail');
-    this.pickUpDetail = JSON.parse(value)
+
+  goBack(){
+    this.router.navigate(['pickup']);
   }
-
-  // getPickUpDetail(orderId: number){
-  //   this.http.get<any>("driver/available-bookings",).subscribe(data => {
-  //     if (data.code == "0000") {
-  //       this.pickUpDetail$.next(data.data)
-  //     } else {
-  //       this.msg.showError("無法取得可接訂單資料，請聯繫技術人員！")
-  //     }
-  //   })
-  // }
-
 }

@@ -1,23 +1,38 @@
 <div *ngIf="orderList$ | async as ordersList">
     <mat-tab-group>
-        <!-- 123456 -->
         <mat-tab label="已完成">
             <ng-container *ngFor="let order of ordersList" class="pb-4 h-auto flex flex-col">
         
-                <div *ngIf="order.statusCode == 99" class="pt-2 flex flex-col">
+                <div *ngIf="order.statusCode == 99" class="pt-2 flex flex-col mb-3">
                     <div class="orderTitle flex flex-row">
-                        <p class="justify-self-start self-center text-[#858484]">{{ order.pickupTime }}</p>
+                        <p class="justify-self-start self-center text-[#858484]">{{ order.pickupTime | date:'yyyy-MM-dd HH:mm:ss'}}</p>
                         <p class="justify-self-start self-center">訂單編號: {{ order.orderCode}}</p>
                     </div>
                     <div class="my-3 grid grid-cols-3 gap-1">
-                        <div class="col-span-2 flex flex-col">
-                            <p>訂單號碼：{{ order.orderCode }}</p>
-                            <p>起始地點:{{ order.startLocation }}</p>
-                            <p>目的地：{{ order.destination }}</p>
+                        <div class="col-span-2 flex flex-col gap-4">
+                        
+                            <div class="flex flex-row gap-2">
+                                <mat-icon>pin-drop</mat-icon>
+                                <span class="self-center">起始:</span>
+                                <span class="self-center">{{ order.startLocation }}</span>
+                            </div>
+                        
+                            <div class="flex flex-row gap-2">
+                                <mat-icon>pin-drop</mat-icon>
+                                <span class="self-center">目的:</span>
+                                <span class="self-center">{{ order.destination }}</span>
+                            </div>
+                        
+                            <div class="flex flex-row gap-2">
+                                <mat-icon>paid</mat-icon>
+                                <span class="self-center">金額:</span>
+                                <span class="self-center">{{ order.priceRangeDown }} ～ {{ order.priceRangeUp }}</span>
+                            </div>
+                        
                         </div>
                         <div class="col-span-1 place-self-end">
-                            <button mat-raised-button color="primary" type="submit" (click)="nextToDetail(order.orderId)">
-                                查看訂單詳情
+                            <button mat-raised-button color="primary" type="submit" (click)="openDialog(order.startLocation, order.destination)">
+                                查看google地圖
                               </button>
                         </div>
                     </div>
@@ -25,22 +40,38 @@
                 </div>
             </ng-container>
         </mat-tab>
-        <mat-tab label="等待司機接單">
+        <mat-tab label="等待乘客同意">
             <ng-container *ngFor="let order of ordersList" class="pb-4 h-auto flex flex-col">
-                <div *ngIf="order.statusCode == 2" class="pt-2 flex flex-col">
+                <div *ngIf="order.statusCode == 2" class="pt-2 flex flex-col mb-3">
                     <div class="orderTitle flex flex-row">
-                        <p class="justify-self-start self-center text-[#858484]">{{ order.pickupTime }}</p>
+                        <p class="justify-self-start self-center text-[#858484]">{{ order.pickupTime | date:'yyyy-MM-dd HH:mm:ss'}}</p>
                         <p class="justify-self-start self-center">訂單編號: {{ order.orderCode}}</p>
                     </div>
                     <div class="my-3 grid grid-cols-3 gap-1">
-                        <div class="col-span-2 flex flex-col">
-                            <p>訂單號碼：{{ order.orderCode }}</p>
-                            <p>起始地點:{{ order.startLocation }}</p>
-                            <p>目的地：{{ order.destination }}</p>
+                        <div class="col-span-2 flex flex-col gap-4">
+                        
+                            <div class="flex flex-row gap-2">
+                                <mat-icon>pin-drop</mat-icon>
+                                <span class="self-center">起始:</span>
+                                <span class="self-center">{{ order.startLocation }}</span>
+                            </div>
+                        
+                            <div class="flex flex-row gap-2">
+                                <mat-icon>pin-drop</mat-icon>
+                                <span class="self-center">目的:</span>
+                                <span class="self-center">{{ order.destination }}</span>
+                            </div>
+                        
+                            <div class="flex flex-row gap-2">
+                                <mat-icon>paid</mat-icon>
+                                <span class="self-center">金額:</span>
+                                <span class="self-center">{{ order.priceRangeDown }} ～ {{ order.priceRangeUp }}</span>
+                            </div>
+                        
                         </div>
                         <div class="col-span-1 place-self-end">
-                            <button mat-raised-button color="primary" type="submit" (click)="nextToDetail(order.orderId)">
-                                查看訂單詳情
+                            <button mat-raised-button color="primary" type="submit" (click)="openDialog(order.startLocation, order.destination)">
+                                查看google地圖
                               </button>
                         </div>
                     </div>
@@ -51,21 +82,41 @@
         </mat-tab>
         <mat-tab label="訂單已媒合">
             <ng-container *ngFor="let order of ordersList">
-                <div *ngIf="order.statusCode == 1">
+                <div *ngIf="order.statusCode == 1" class="pb-4 h-auto flex flex-col">
                     <div class="orderTitle flex flex-row">
-                        <p class="justify-self-start self-center text-[#858484]">{{ order.pickupTime }}</p>
+                        <p class="justify-self-start self-center text-[#858484]">{{ order.pickupTime | date:'yyyy-MM-dd HH:mm:ss'}}</p>
                         <p class="justify-self-start self-center">訂單編號: {{ order.orderCode}}</p>
                     </div>
                     <div class="my-3 grid grid-cols-3 gap-1">
-                        <div class="col-span-2 flex flex-col">
-                            <p>訂單號碼：{{ order.orderCode }}</p>
-                            <p>起始地點:{{ order.startLocation }}</p>
-                            <p>目的地：{{ order.destination }}</p>
+                        <div class="col-span-2 flex flex-col gap-4">
+                        
+                            <div class="flex flex-row gap-2">
+                                <mat-icon>pin-drop</mat-icon>
+                                <span class="self-center">起始:</span>
+                                <span class="self-center">{{ order.startLocation }}</span>
+                            </div>
+                        
+                            <div class="flex flex-row gap-2">
+                                <mat-icon>pin-drop</mat-icon>
+                                <span class="self-center">目的:</span>
+                                <span class="self-center">{{ order.destination }}</span>
+                            </div>
+                        
+                            <div class="flex flex-row gap-2">
+                                <mat-icon>paid</mat-icon>
+                                <span class="self-center">金額:</span>
+                                <span class="self-center">{{ order.priceRangeDown }} ～ {{ order.priceRangeUp }}</span>
+                            </div>
+                        
                         </div>
                         <div class="col-span-1 place-self-end">
-                            <button mat-raised-button color="primary" type="submit" (click)="nextToDetail(order.orderId)">
-                                查看訂單詳情
+                            <button mat-raised-button color="primary" type="submit" (click)="openDialog(order.startLocation, order.destination)">
+                                查看google地圖
                               </button>
+
+                            <button class="ml-2" mat-raised-button color="primary" type="submit" (click)="goToOrderIng(order.orderId)">
+                                訂單執行頁
+                            </button>
                         </div>
                     </div>
                     <hr class="text-black">

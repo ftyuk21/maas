@@ -118,7 +118,6 @@ export class OrderingComponent implements OnInit {
   sendOrder() {
     
     if(this.orderForm.get('priceRangeDown').value > this.orderForm.get('priceRangeUp').value){
-      console.log(this.orderForm.get('priceRangeDown').value )
       this.msg.showError("價格上限不可低於價格下限", "")
       return;
     }

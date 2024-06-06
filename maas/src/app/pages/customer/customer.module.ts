@@ -8,10 +8,11 @@ import { FormsModule } from '@angular/forms';
 import { CustomerOrderListComponent } from './customer-order-list/customer-order-list.component'; // <-- 匯入 FormsModule
 import { CustomerStatesCodePipe, TimePipe } from './customer.pipe';
 import { CustomerOrderDetailComponent } from './customer-order-detail/customer-order-detail.component';
+import { DatePipe } from '@angular/common';
 
 
 export const routes: Routes = [
-  { path: 'customer-ing/:id', component: CustomerIngComponent, pathMatch: 'full', data: { breadcrumb: '訂單進行中' } },
+  { path: 'customer-ing/:orderId', component: CustomerIngComponent, pathMatch: 'full', data: { breadcrumb: '訂單進行中' } },
   { path: 'customer-order-list', component: CustomerOrderListComponent, pathMatch: 'full', data: { breadcrumb: '歷史訂單紀錄' } },
   { path: 'customer-order-detail/:orderId', component: CustomerOrderDetailComponent, pathMatch: 'full', data: { breadcrumb: '訂單詳細資訊' } }
 ];
@@ -35,6 +36,7 @@ export const routes: Routes = [
   exports:[
     CustomerStatesCodePipe,
     TimePipe
-  ]
+  ],
+  providers: [DatePipe],
 })
 export class CustomerModule { }
