@@ -12,6 +12,7 @@ export const routes: Routes = [
             { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
             { path: 'account', loadChildren: () => import('./pages/account/account.module').then(m => m.AccountModule), data: { breadcrumb: 'Account Settings' } },
             { path: 'customer', loadChildren: () => import('./pages/customer/customer.module').then(m => m.CustomerModule), canActivate: [AuthGuard] },
+            { path: 'agree', loadChildren: () => import('./pages/agree/agree.module').then(m => m.AgreeModule), canActivate: [AuthGuard] },
             { path: 'driver', loadChildren: () => import('./pages/driver/driver.module').then(m => m.DriverModule), canActivate: [AuthGuard] },
             { path: 'compare', loadChildren: () => import('./pages/compare/compare.module').then(m => m.CompareModule), data: { breadcrumb: 'Compare' } },
             { path: 'wishlist', loadChildren: () => import('./pages/wishlist/wishlist.module').then(m => m.WishlistModule), data: { breadcrumb: 'Wishlist' } },

@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // 导入 FormsModule
 import { Subscription } from 'rxjs';
 import { WebSocketService } from 'src/app/shared/service/web-socket.service';
@@ -14,12 +15,17 @@ interface Info {
   styleUrls: ['./customer-chat.component.scss']
 })
 export class CustomerChatComponent {
+
+  @Input() overOrder: string;
+  @Input() userId: string;
+  @Input() orderId: string;
+  @Output() finish = new EventEmitter<string>();
   message: string;
   messages: Info[] = [];
   connectionTime: string;
   socketA: any
 
-  constructor() { }
+  constructor(public http: HttpClient) { }
 
   ngOnInit(): void {
     this.socketA = new WebSocket('ws://localhost:8080/MaasService/customerChat');
@@ -27,9 +33,11 @@ export class CustomerChatComponent {
     // Event listener for WebSocket messages in Chat Room A
     this.socketA.addEventListener('message', (event) => {
       const message = event.data;
-      if (message.startsWith('[driver]')){
+      if (message.includes('7Rm5nK9oPq')){
+        this.orderFinish()
+      }else if (message.startsWith('[driver]')) {
         this.messages.push({ msg: message.replace("[driver]", ""), who: 'driver' });
-      }else{
+      }else {
         this.messages.push({ msg: message, who: 'customer' });
       }
     });
@@ -51,6 +59,20 @@ export class CustomerChatComponent {
   }
 
   isOwnMessage(who: string): boolean {
-    return who === 'customer'; 
+    return who === 'customer';
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // 当输入属性发生变化时被调用
+    // changes 是一个对象，包含了变化前后的值
+    // if (changes.overOrder && changes.overOrder.currentValue == "7Rm5nK9oPq") {
+    //   this.http.post<any>('Cloud/arrived', { orderId: this.orderId, identity: 2 }).subscribe(data => {
+    //     this.socketA.send(`7Rm5nK9oPq`);
+    //   })
+    // }
+  }
+
+  orderFinish(){
+    this.finish.emit('7Rm5nK9oPq');
   }
 }

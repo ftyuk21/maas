@@ -37,6 +37,7 @@ import { AuthService } from './shared/service/auth.service';
 import { AuthInterceptor } from './shared/service/auth.interceptor';
 import { AuthGuard } from './shared/service/auth.guard';
 import { ShowGoogleMapComponent } from './pages/show-google-map/show-google-map.component'
+import { CommentDialogComponent } from './pages/comment-dialog/comment-dialog.component';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { ShowGoogleMapComponent } from './pages/show-google-map/show-google-map.
     BreadcrumbComponent,
     OptionsComponent,
     FooterComponent,
-    ShowGoogleMapComponent
+    ShowGoogleMapComponent,
+    CommentDialogComponent
   ],
   providers: [
     AuthService,

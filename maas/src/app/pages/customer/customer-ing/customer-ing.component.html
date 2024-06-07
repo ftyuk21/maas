@@ -6,7 +6,7 @@
                     <div id="map" style="height: 100%; width:100%;"></div>
                 </div>
                 <div class="col-span-2">
-                    <app-customer-chat></app-customer-chat>
+                    <app-customer-chat (finish)="receiveMessage($event)"  [orderId]="orderId" [userId]="userId" [overOrder]="overOrder"></app-customer-chat>
                 </div>
                 <div class="col-span-2 flex flex-col">
                     <div class="">
@@ -45,7 +45,7 @@
                                     </div>
 
                                     <div class="flex flex-row-reverse gap-2">
-                                        <button mat-raised-button color="primary" type="submit" (click)="goToOrderIng(order.orderId)">
+                                        <button [disabled]="overOrder != '7Rm5nK9oPq'" mat-raised-button color="primary" type="submit" (click)="sendOverOrder(order.orderId)">
                                             結單
                                         </button>
                                     </div>

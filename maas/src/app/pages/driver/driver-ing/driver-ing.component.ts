@@ -14,6 +14,10 @@ import { GoogleService } from '../../../shared/service/google.service'
 })
 export class DriverIngComponent {
 
+  overOrder: string = ""; // 7Rm5nK9oPq
+  userId: number;
+  orderId: number;
+
   start: google.maps.LatLngLiteral;
   end: google.maps.LatLngLiteral;
 
@@ -40,9 +44,15 @@ export class DriverIngComponent {
   // 自己加入 implements OnInit
 
   ngOnInit(): void {
+    this.authService.userInfo$.subscribe(info => {
+      if (info) {
+        this.userId = info.data.userId;
+      }
+    })
     this.route.params.subscribe(params => {
-      const id = params['orderId']; // 获取路由参数
-      this.getOrderDetail(id)
+      this.orderId = params['orderId']; // 获取路由参数
+      this.getOrderDetail(this.orderId)
+      
     });
 
   }
@@ -135,5 +145,9 @@ export class DriverIngComponent {
       // Open info window
       infoWindow.open(this.map, endPoint);
     });
+  }
+
+  sendOverOrder(orderId: number){
+    this.overOrder = "7Rm5nK9oPq";
   }
 }

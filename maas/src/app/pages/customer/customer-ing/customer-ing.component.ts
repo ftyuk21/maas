@@ -7,6 +7,8 @@ import { AuthService } from '../../../shared/service/auth.service'
 import { NotificationService } from 'src/app/shared/service/notification.service';
 import { HttpClient } from '@angular/common/http';
 import { GoogleService } from '../../../shared/service/google.service'
+import { CommentDialogComponent } from '../../comment-dialog/comment-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-customer-ing',
@@ -14,6 +16,10 @@ import { GoogleService } from '../../../shared/service/google.service'
   styleUrls: ['./customer-ing.component.scss']
 })
 export class CustomerIngComponent {
+
+  overOrder: string = ""; // 7Rm5nK9oPq
+  userId: number;
+  orderId: number;
 
   start: google.maps.LatLngLiteral;
   end: google.maps.LatLngLiteral;
@@ -36,14 +42,14 @@ export class CustomerIngComponent {
   // } = { options: [], position: [] };
 
   constructor(private route: ActivatedRoute,
-  private router: Router,public msg: NotificationService,
+    private router: Router, public msg: NotificationService, public dialog: MatDialog,
     public authService: AuthService, public http: HttpClient, public googleService: GoogleService) { }
   // 自己加入 implements OnInit
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      const id = params['orderId']; // 获取路由参数
-      this.getOrderDetail(id)
+      this.orderId = params['orderId']; // 获取路由参数
+      this.getOrderDetail(this.orderId)
     });
 
   }
@@ -136,5 +142,27 @@ export class CustomerIngComponent {
       // Open info window
       infoWindow.open(this.map, endPoint);
     });
+  }
+
+  sendOverOrder() {
+    this.http.post<any>('Cloud/arrived', { orderId: this.orderId, identity: 1 }).subscribe(data => {
+      const dialogRef = this.dialog.open(CommentDialogComponent, {
+        width: '20%',
+        data: { comment: "", star: "", identity: 2 },
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(123)
+        this.http.post<any>('Cloud/comment', { orderId: this.orderId, userId: this.userId, comment: result.comment, star: result.star, identity: 1 }).subscribe(data => {
+          this.msg.showSuccess("評論成功");
+          this.router.navigate(['customer/customer-order-list']);
+        })
+      });
+    })
+  }
+
+
+  receiveMessage($event) {
+    this.overOrder = $event;
   }
 }

@@ -3,6 +3,9 @@ package ndhu.tw.MaasService.controller;
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import ndhu.tw.MaasService.SpringDocConfig.ChatManager;
+import ndhu.tw.MaasService.db.repository.OrdersRepository;
+import ndhu.tw.MaasService.model.request.ArrivedRequestModel;
+import ndhu.tw.MaasService.service.MaasService;
 import ndhu.tw.MaasService.utility.LogUtility;
 
 import java.io.IOException;
@@ -19,9 +22,10 @@ public class DriverChatController {
 
         LogUtility.info(getClass(),String.format("[websocket][driver] 收到消息：id={%s}，message={%s}", this.session.getId(), message));
 
-        if (message.equalsIgnoreCase("bye")) {
+        if (message.contains("7Rm5nK9oPq")) {
             // 伺服器主動關閉。狀態碼: NORMAL_CLOSURE（正常關閉）。
-            this.session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "Bye"));;
+            ChatManager.sendMessageToCustomer("[driver]" + message);
+            this.session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "結單"));
             return;
         }
         ChatManager.sendMessageToCustomer("[driver]" + message);

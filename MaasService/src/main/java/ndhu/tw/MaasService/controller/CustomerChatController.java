@@ -1,15 +1,7 @@
 package ndhu.tw.MaasService.controller;
 
-import jakarta.websocket.CloseReason;
-import jakarta.websocket.EndpointConfig;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnError;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
+import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
-import java.time.Instant;
-
 import ndhu.tw.MaasService.SpringDocConfig.ChatManager;
 import ndhu.tw.MaasService.utility.LogUtility;
 
@@ -26,9 +18,11 @@ public class CustomerChatController {
 
         LogUtility.info(getClass(),String.format("[websocket][customer] 收到消息：id={%s}，message={%s}", this.session.getId(), message));
 
-        if (message.equalsIgnoreCase("bye")) {
+        if (message.contains("7Rm5nK9oPq")) {
             // 伺服器主動關閉。狀態碼: NORMAL_CLOSURE（正常關閉）。
-            this.session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "Bye"));;
+            ChatManager.sendMessageToDriver("[customer]" + message);
+            this.session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "結單"));
+
             return;
         }
         ChatManager.sendMessageToDriver("[customer]" + message);
