@@ -63,6 +63,17 @@
 		</dependency>
 
 <!--		websocket-->
+<!--		<dependency>-->
+<!--			<groupId>javax.websocket</groupId>-->
+<!--			<artifactId>javax.websocket-api</artifactId>-->
+<!--			<version>1.1</version> &lt;!&ndash; 或者根據你的需求指定版本 &ndash;&gt;-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-websocket</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
@@ -97,6 +108,9 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+<!--					<arguments>-->
+<!--						<argument>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argument>-->
+<!--					</arguments>-->
 				</configuration>
 			</plugin>
 		</plugins>
