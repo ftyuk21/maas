@@ -48,7 +48,6 @@ export class MenuComponent implements OnInit {
    * @param type 11:乘客歷史訂單紀錄 12:乘客下訂單 21:司機歷史訂單紀錄 22:司機接單列表
    */
   nextPage(type: number) {
-    console.log(type)
     if(type == 11){
       // 歷史訂單
       this.router.navigate(['/customer/customer-order-list']);

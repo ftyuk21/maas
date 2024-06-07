@@ -34,7 +34,7 @@ export class DriverOrderListComponent {
     this.http.get<any>("passenger/checkOrder",{params: {userId}}).subscribe(data => {
       if(data.data.customer.length > 0 ){
         this.orderList$.next(data.data.driver);
-        console.log(data.data.driver)
+        // console.log(data.data.driver)
       }else{
         this.msg.showInfo("無訂單資料！")
       }
@@ -53,12 +53,12 @@ export class DriverOrderListComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
       // this.animal = result;
     });
   }
 
   goToOrderIng(orderId: number) {
-    this.router.navigate(['customer/customer-ing', orderId]);
+    this.router.navigate(['driver/driver-ing', orderId]);
   }
 }

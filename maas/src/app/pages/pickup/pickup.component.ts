@@ -110,7 +110,7 @@ export class PickupComponent implements OnInit {
   getPickUpList() {
     this.http.get<any>("driver/available-bookings",).subscribe(data => {
       if (data.code == "0000") {
-        console.log(data)
+        // console.log(data)
         this.pickUpList$.next(data.data)
         // this.pickUpList = data.data.map(item => {
         //   let start

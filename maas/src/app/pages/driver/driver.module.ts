@@ -9,7 +9,7 @@ import { DriverOrderListComponent } from './driver-order-list/driver-order-list.
 import { DriverOrderDetailComponent } from './driver-order-detail/driver-order-detail.component';
 
 export const routes: Routes = [
-  { path: 'driver-ing/:id', component: DriverIngComponent, pathMatch: 'full', data: { breadcrumb: '訂單進行中' } },
+  { path: 'driver-ing/:orderId', component: DriverIngComponent, pathMatch: 'full', data: { breadcrumb: '訂單進行中' } },
   { path: 'driver-order-list', component: DriverOrderListComponent, pathMatch: 'full', data: { breadcrumb: '歷史訂單紀錄' } },
   { path: 'driver-order-detail/:orderId', component: DriverOrderDetailComponent, pathMatch: 'full', data: { breadcrumb: '訂單詳細資訊' } }
 ];

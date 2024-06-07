@@ -84,6 +84,7 @@ export class OrderingComponent implements OnInit {
         this.setGooglePostion(o)
       })
       .catch(error => {
+        this.center = { lat: 23.897739340971725, lng: 121.54227420918299 }
         this.msg.showError("取得當前位置錯誤，請聯繫技術人員！", "錯誤")
         console.error(error);
       });

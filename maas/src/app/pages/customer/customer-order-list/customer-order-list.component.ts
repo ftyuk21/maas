@@ -32,10 +32,8 @@ export class CustomerOrderListComponent implements OnInit {
 
   getOrderList(userId: number){
     this.http.get<any>("passenger/checkOrder",{params: {userId}}).subscribe(data => {
-      console.log(data)
       if(data.data.customer.length > 0 ){
         this.orderList$.next(data.data.customer);
-        console.log(data.data.customer)
       }else{
         this.msg.showInfo("無訂單資料！")
       }
@@ -50,7 +48,7 @@ export class CustomerOrderListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
       // this.animal = result;
     });
   }
