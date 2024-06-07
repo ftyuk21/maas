@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WaitDialogComponent } from '../wait-dialog/wait-dialog.component';
 import { GoogleService } from 'src/app/shared/service/google.service';
 import { NotificationService } from 'src/app/shared/service/notification.service';
 import { GoogleMap } from "@angular/google-maps";
@@ -20,14 +19,14 @@ export class Options {
   options: google.maps.MarkerOptions;
 }
 @Component({
-  selector: 'app-pickup-detail',
-  templateUrl: './pickup-detail.component.html',
-  styleUrls: ['./pickup-detail.component.scss']
+  selector: 'app-agree-detail',
+  templateUrl: './agree-detail.component.html',
+  styleUrls: ['./agree-detail.component.scss']
 })
-export class PickupDetailComponent implements OnInit {
+export class AgreeDetailComponent {
   @ViewChild('googleMap') googleMap: GoogleMap;
   id: any; // orderId
-  customerId: number // 被查詢者Id
+  driverId: number // 被查詢者Id
   comment: string[] = [];
   userId: number;
 
@@ -41,7 +40,7 @@ export class PickupDetailComponent implements OnInit {
 
   progressBarCount;
 
-  pickUpDetail= {}; // 訂單詳細資料
+  pickUpDetail = {}; // 訂單詳細資料
 
   pickUpDetail$ = new BehaviorSubject<any>("");
 
@@ -55,18 +54,18 @@ export class PickupDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     public http: HttpClient, public dialog: MatDialog, public google: GoogleService, private router: Router,
-    public msg: NotificationService, private cdr: ChangeDetectorRef,private authService: AuthService) {
+    public msg: NotificationService, private cdr: ChangeDetectorRef, private authService: AuthService) {
   }
 
 
   ngOnInit(): void {
     this.authService.userInfo$.subscribe(i => {
-      if(i){
+      if (i) {
         this.userId = i.data.userId
       }
     })
     this.route.params.subscribe(params => {
-      this.id = params['id'];
+      this.id = params['orderId'];
       this.getPickUpDetail(this.id);
     });
   }
@@ -74,50 +73,48 @@ export class PickupDetailComponent implements OnInit {
 
   accept() {
     this.pickUpDetail$.subscribe(request => {
-      console.log(request)
-      request.statusCode = 12
-      request.driverId = this.userId;
-      this.http.post<any>("fixed/changeOrderStatusCode",  request ).subscribe(data => {
+      request.statusCode = 1
+      this.http.post<any>("fixed/changeOrderStatusCode", request).subscribe(data => {
         this.msg.showSuccess("成功")
         // this.goBack();
-        this.router.navigate(['/driver/driver-order-list']);
+        this.router.navigate(['/customer/customer-order-list']);
       })
     })
   }
 
-  getPickUpDetail(orderId: number){
-    this.http.get<any>("passenger/getOrder",{params:{orderId}}).subscribe(async data => {
+  getPickUpDetail(orderId: number) {
+    this.http.get<any>("passenger/getOrder", { params: { orderId } }).subscribe(async data => {
       if (data.code == "0000") {
         this.pickUpDetail$.next(data.data)
-        this.customerId = data.data.customerId;
+        this.driverId = data.data.driverId;
         const startResult = await this.google.getCoordinates2(data.data.startLocation);
         const endResult = await this.google.getCoordinates2(data.data.destination);
         this.initializeMap(startResult, endResult)
-        this.getCommentList(this.customerId, 1);
+        this.getCommentList(this.driverId, 2);
       } else {
-        this.msg.showError("無法取得可接訂單資料，請聯繫技術人員！")
+        this.msg.showError("無法取得待回覆訂單資料，請聯繫技術人員！")
       }
     })
   }
 
-  getCommentList(userId, identity){
-    this.http.get<any>("Cloud/checkComment", { params: { userId, identity }}).subscribe(data => {
-      if(data.data.length > 0){
+  getCommentList(userId, identity) {
+    this.http.get<any>("Cloud/checkComment", { params: { userId, identity } }).subscribe(data => {
+      if (data.data.length > 0) {
         // this.comment = data.data.comment;
-        data.data.forEach((item:any) => {
+        data.data.forEach((item: any) => {
           // 將每個物件中的 comment 屬性加入到 this.comment 陣列中
-          this.comment.push(item.customercomment);
+          this.comment.push(item.drivercomment);
         });
         this.ratingsCount = data.data.length;
-        this.ratingsValue = data.data.reduce((acc, curr) => acc + curr.customerstar, 0);
-        
+        this.ratingsValue = data.data.reduce((acc, curr) => acc + curr.driverstar, 0);
+
         // 初始化一個包含五個元素的陣列，初始值為 0
         this.progressBarCount = Array.from({ length: 5 }, () => 0);
 
         // 遍歷 data.data 陣列中的每個物件
         data.data.forEach((item: any) => {
           // 取得評分，並將其轉換為數字
-          const rating = item.customerstar;
+          const rating = item.driverstar;
 
           // 如果評分在合法範圍內（1 到 5 之間）
           if (rating >= 1 && rating <= 5) {
@@ -126,21 +123,16 @@ export class PickupDetailComponent implements OnInit {
             this.progressBarCount[index]++;
           }
         });
-        
-        // this.progressBarCount = Array.from({ length: 5 }, (_, i) => {
-        //   const rating = 5 - i; // 從 5 開始遞減
-        //   const count = data.data.customerstar.filter(comment => Math.floor(comment.rating) === rating).length;
-        //   return count;
-        // });
-      } else if (data.data.length == 0){
+
+      } else if (data.data.length == 0) {
         this.comment = [];
         this.ratingsCount = 0;
         this.ratingsValue = 5.0;
         // 初始化一個包含五個元素的陣列，初始值為 0
         this.progressBarCount = Array.from({ length: 5 }, () => 0);
         this.msg.showInfo("無評價", "");
-      }else{
-        this.msg.showInfo("評價取得異常，請聯繫技術人員","");
+      } else {
+        this.msg.showInfo("評價取得異常，請聯繫技術人員", "");
       }
     })
   }
@@ -245,7 +237,14 @@ export class PickupDetailComponent implements OnInit {
   }
 
 
-  goBack(){
-    this.router.navigate(['pickup']);
+  no() {
+    this.pickUpDetail$.subscribe(request => {
+      request.statusCode = 2
+      request.driverId = null;
+      this.http.post<any>("fixed/changeOrderStatusCode", request).subscribe(data => {
+        this.msg.showSuccess("成功")
+        this.router.navigate(['/agree/agree-list']);
+      })
+    })
   }
 }

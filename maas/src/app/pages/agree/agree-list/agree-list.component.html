@@ -1,0 +1,43 @@
+<div *ngIf="orderList$ | async as ordersList" class="overflow-auto">
+    <ng-container *ngFor="let order of ordersList" class="pb-4 h-auto flex flex-col">
+
+        <div class="pt-2 flex flex-col mb-3">
+            <div class="orderTitle flex flex-row">
+                <p class="justify-self-start self-center text-[#858484]">{{ order.pickupTime | date:'yyyy-MM-dd HH:mm:ss'}}
+                </p>
+                <p class="justify-self-start self-center">訂單編號: {{ order.orderCode}}</p>
+            </div>
+            <div class="my-3 grid grid-cols-3 gap-1">
+                <div class="col-span-2 flex flex-col gap-4">
+
+                    <div class="flex flex-row gap-2">
+                        <mat-icon>pin-drop</mat-icon>
+                        <span class="self-center">起始:</span>
+                        <span class="self-center">{{ order.startLocation }}</span>
+                    </div>
+
+                    <div class="flex flex-row gap-2">
+                        <mat-icon>pin-drop</mat-icon>
+                        <span class="self-center">目的:</span>
+                        <span class="self-center">{{ order.destination }}</span>
+                    </div>
+
+                    <div class="flex flex-row gap-2">
+                        <mat-icon>paid</mat-icon>
+                        <span class="self-center">金額:</span>
+                        <span class="self-center">{{ order.priceRangeDown }} ～ {{ order.priceRangeUp }}</span>
+                    </div>
+
+                </div>
+                <div class="col-span-1 place-self-end">
+                    <button mat-raised-button color="primary" type="submit"
+                        (click)="goDetail(order.orderId)">
+                        回覆訂單
+                    </button>
+                </div>
+            </div>
+            <hr class="text-black">
+        </div>
+    </ng-container>
+
+</div>

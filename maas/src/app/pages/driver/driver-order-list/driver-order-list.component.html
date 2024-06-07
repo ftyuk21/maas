@@ -42,7 +42,7 @@
         </mat-tab>
         <mat-tab label="等待乘客同意">
             <ng-container *ngFor="let order of ordersList" class="pb-4 h-auto flex flex-col">
-                <div *ngIf="order.statusCode == 2" class="pt-2 flex flex-col mb-3">
+                <div *ngIf="order.statusCode == 12" class="pt-2 flex flex-col mb-3">
                     <div class="orderTitle flex flex-row">
                         <p class="justify-self-start self-center text-[#858484]">{{ order.pickupTime | date:'yyyy-MM-dd HH:mm:ss'}}</p>
                         <p class="justify-self-start self-center">訂單編號: {{ order.orderCode}}</p>

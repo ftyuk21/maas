@@ -32,7 +32,7 @@ export class DriverOrderListComponent {
 
   getOrderList(userId: number){
     this.http.get<any>("passenger/checkOrder",{params: {userId}}).subscribe(data => {
-      if(data.data.customer.length > 0 ){
+      if (data.data.driver.length > 0 ){
         this.orderList$.next(data.data.driver);
         // console.log(data.data.driver)
       }else{

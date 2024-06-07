@@ -32,9 +32,10 @@
             <mat-icon>person</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item>
-                <mat-icon>settings</mat-icon>
-                <span>帳戶設定</span>
+            <button mat-menu-item (click)="goToAgree()">
+                <mat-icon [ngStyle]="{'color': (agreeCount$ | async) > 0 ? 'red' : 'black'}">notifications</mat-icon>
+                <ng-conta></ng-conta>
+                <span>待回覆訂單（{{ (agreeCount$ | async) }}）</span>
             </button>
             <button mat-menu-item (click)="logout()">
                 <mat-icon>logout</mat-icon>

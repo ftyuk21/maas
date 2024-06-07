@@ -1,13 +1,11 @@
 package ndhu.tw.MaasService.service;
 
 import ndhu.tw.MaasService.db.model.UserInfo;
-import ndhu.tw.MaasService.model.request.ArrivedRequestModel;
-import ndhu.tw.MaasService.model.request.BookingRequestModel;
-import ndhu.tw.MaasService.model.request.CommentRequestModel;
-import ndhu.tw.MaasService.model.request.GetBookingRequestModel;
+import ndhu.tw.MaasService.model.request.*;
 import ndhu.tw.MaasService.model.response.CheckCommentResponse;
 import org.aspectj.weaver.ast.Or;
 import org.hibernate.annotations.Check;
+import org.hibernate.query.Order;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Example;
 import ndhu.tw.MaasService.db.model.Orders;
@@ -211,6 +209,36 @@ public class MaasService {
         List<Orders> findOrder = ordersRepository.findAll(example);
         response.setData(findOrder);
         return response;
+    }
+
+
+    public BaseModel changeOrderStatusCode(Orders request) {
+        BaseModel response = new BaseModel();
+        Orders orders = ordersRepository.save(request);
+        response.setData(orders);
+        return response;
+    }
+
+    public BaseModel getOrderAgreeList(Long userId){
+        BaseModel res = new BaseModel();
+        Orders o = new Orders();
+        o.setCustomerId(userId);
+        o.setStatusCode(12L);
+        Example<Orders> example = Example.of(o);
+        List<Orders> resData = ordersRepository.findAll(example);
+        res.setData(resData);
+        return res;
+    }
+
+    public BaseModel getOrderAgreeListCount(Long userId){
+        BaseModel res = new BaseModel();
+        Orders o = new Orders();
+        o.setCustomerId(userId);
+        o.setStatusCode(12L);
+        Example<Orders> example = Example.of(o);
+        List<Orders> resData = ordersRepository.findAll(example);
+        res.setData(resData.size());
+        return res;
     }
 }
 

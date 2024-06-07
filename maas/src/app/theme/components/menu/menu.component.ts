@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../shared/service/auth.service'
 import { NotificationService } from 'src/app/shared/service/notification.service';
 import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -13,6 +14,8 @@ export class MenuComponent implements OnInit {
 
   userInfo$: any = this.authService.userInfo$.asObservable();
 
+  agreeCount$: any = new BehaviorSubject<any>(null);
+
   constructor(private route: ActivatedRoute,
     private router: Router, public msg: NotificationService,
     public authService: AuthService, public http: HttpClient) { }
@@ -22,7 +25,10 @@ export class MenuComponent implements OnInit {
       this.authService.userInfo$.subscribe(info => {
         if(info == null){
           this.authService.getUserInfo();
+        }else{
+          this.getAgreeCount(info.data.userId)
         }
+        
       })
     }else{
     }
@@ -59,5 +65,15 @@ export class MenuComponent implements OnInit {
     }else if(type == 22){
       this.router.navigate(['/pickup']);
     }
+  }
+
+  getAgreeCount(userId: number){
+    this.http.get<any>('fixed/getOrderAgreeListCount',{params:{userId: userId}}).subscribe(data => {
+      this.agreeCount$.next(data.data)
+    })
+  }
+
+  goToAgree(){
+    this.router.navigate(['agree/agree-list']);
   }
 }
